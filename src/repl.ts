@@ -1,8 +1,8 @@
 import { repl } from '@nestjs/core';
-import { CliModule } from './cli.module.js';
+import { ReplModule } from './repl.module.js';
 
 async function bootstrap() {
-  const replServer = await repl(CliModule);
+  const replServer = await repl(ReplModule);
   replServer.setupHistory('.nestjs_repl_history', (err) => {
     if (err) {
       console.error(err);
