@@ -16,4 +16,14 @@ export class ClientService {
   async findOne() {
     return await this.clientRepository.find();
   }
+
+  async findOneOrFail() {
+    const client = await this.findOne();
+
+    if (client === null) {
+      throw new Error('Client not found!');
+    }
+
+    return client;
+  }
 }
