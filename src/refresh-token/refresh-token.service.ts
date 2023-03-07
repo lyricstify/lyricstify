@@ -1,12 +1,12 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { AxiosError, AxiosRequestConfig } from 'axios';
-import { catchError, firstValueFrom, map, throwError } from 'rxjs';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { firstValueFrom, map } from 'rxjs';
+import { throwAxiosErrorResponseIfAvailable } from '../common/rxjs/operators/throw-axios-error-response-if-available.operator.js';
 import { ClientEntity } from '../client/entities/client.entity.js';
 import { DataSourceRepository } from '../common/data-source/data-source.repository.js';
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto.js';
 import { RefreshTokenEntity } from './entities/refresh-token.entity.js';
-import { RequestAccessTokenInvalidResponseInterface } from './interfaces/request-access-token-invalid-response.interface.js';
 import { RequestAccessTokenResponseInterface } from './interfaces/request-access-token-response.interface.js';
 
 @Injectable()
@@ -25,11 +25,12 @@ export class RefreshTokenService {
       redirect_uri: client.redirectUri,
       grant_type: 'authorization_code',
     });
+    const buffer = Buffer.from(`${client.id}:${client.secret}`).toString(
+      'base64',
+    );
     const config: AxiosRequestConfig = {
       headers: {
-        Authorization: `Basic ${Buffer.from(
-          `${client.id}:${client.secret}`,
-        ).toString('base64')}`,
+        Authorization: `Basic ${buffer}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     };
@@ -41,23 +42,8 @@ export class RefreshTokenService {
         config,
       )
       .pipe(
-        map(
-          ({ data }) =>
-            new CreateRefreshTokenDto({
-              scope: data.scope,
-              type: data.token_type,
-              value: data.refresh_token,
-            }),
-        ),
-        catchError(
-          (error: AxiosError<RequestAccessTokenInvalidResponseInterface>) =>
-            throwError(
-              () =>
-                new Error(
-                  error.response?.data.error_description || error.message,
-                ),
-            ),
-        ),
+        map(this.convertToCreateRefreshTokenDto(buffer)),
+        throwAxiosErrorResponseIfAvailable(),
       );
 
     const createRefreshTokenDto = await firstValueFrom(request$);
@@ -66,5 +52,25 @@ export class RefreshTokenService {
 
   async findOne() {
     return await this.refreshTokenService.find();
+  }
+
+  async findOneOrFail() {
+    const refreshToken = await this.findOne();
+
+    if (refreshToken === null) {
+      throw new Error('Refresh token not found!');
+    }
+
+    return refreshToken;
+  }
+
+  private convertToCreateRefreshTokenDto(buffer: string) {
+    return ({ data }: AxiosResponse<RequestAccessTokenResponseInterface>) =>
+      new CreateRefreshTokenDto({
+        scope: data.scope,
+        type: data.token_type,
+        value: data.refresh_token,
+        buffer,
+      });
   }
 }
