@@ -1,7 +1,7 @@
 import { OmitType } from '@nestjs/mapped-types';
 import { ClientEntity } from '../../client/entities/client.entity.js';
 
-export class InitializeClientDto extends OmitType(ClientEntity, ['code']) {
+export class InitializeOptionsDto extends OmitType(ClientEntity, ['code']) {
   redirectUriPort: string;
 
   constructor({
@@ -9,7 +9,7 @@ export class InitializeClientDto extends OmitType(ClientEntity, ['code']) {
     redirectUri,
     redirectUriPort,
     secret,
-  }: InitializeClientDto) {
+  }: InitializeOptionsDto) {
     super();
 
     this.id = id;

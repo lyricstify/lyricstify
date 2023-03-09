@@ -7,7 +7,7 @@ import {
 } from 'nest-commander';
 import ora from 'ora';
 import terminalLink from 'terminal-link';
-import { InitializeClientDto } from './dto/initialize-client.dto.js';
+import { InitializeOptionsDto } from './dto/initialize-options.dto.js';
 import { RequestAuthorizationDto } from './dto/request-authorization.dto.js';
 import { InitializeService } from './initialize.service.js';
 import { InitializeOptionsInterface } from './interfaces/initialize-options.interface.js';
@@ -22,6 +22,12 @@ export class InitializeCommand extends CommandRunner {
   }
 
   async run(inputs: string[], options: InitializeOptionsInterface) {
+    if (inputs.length !== 0) {
+      throw new Error(
+        chalk.redBright(`${inputs.join(',')} is not valid command!`),
+      );
+    }
+
     const answers = await this.inquirerService.ask('initialize', options);
 
     if (answers.start === 'No') {
@@ -32,7 +38,7 @@ export class InitializeCommand extends CommandRunner {
       clientId: answers.clientId,
       redirectUriPort: Number(answers.redirectUriPort),
     });
-    const initializeClientDto = new InitializeClientDto({
+    const initializeOptionsDto = new InitializeOptionsDto({
       id: answers.clientId,
       secret: answers.clientSecret,
       redirectUri: requestAuthorizationDto.redirectUri,
@@ -49,10 +55,15 @@ export class InitializeCommand extends CommandRunner {
     );
 
     const loading = ora('We are waiting for you to finish.').start();
-    const result = await this.initializeService.authorize(initializeClientDto);
+    const result = await this.initializeService.authorize(initializeOptionsDto);
 
     loading.stop();
-    console.info(result);
+
+    if (result.status === 'SUCCESS') {
+      console.info(result);
+    } else {
+      console.error(result);
+    }
   }
 
   @Option({

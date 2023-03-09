@@ -4,7 +4,7 @@ import { RefreshTokenService } from '../refresh-token/refresh-token.service.js';
 import { ClientService } from '../client/client.service.js';
 import { CreateClientDto } from '../client/dto/create-client-dto.js';
 import { bootstrap } from '../http.js';
-import { InitializeClientDto } from './dto/initialize-client.dto.js';
+import { InitializeOptionsDto } from './dto/initialize-options.dto.js';
 import { RequestAuthorizationDto } from './dto/request-authorization.dto.js';
 
 @Injectable()
@@ -17,7 +17,9 @@ export class InitializeService {
     private readonly refreshTokenService: RefreshTokenService,
   ) {}
 
-  async authorize(initializeOptionsDto: InitializeClientDto) {
+  async authorize(
+    initializeOptionsDto: InitializeOptionsDto,
+  ): Promise<{ message: string; status: 'ERROR' | 'SUCCESS' }> {
     try {
       const code = await bootstrap(
         Number(initializeOptionsDto.redirectUriPort),
@@ -33,11 +35,14 @@ export class InitializeService {
       await this.clientService.replace(createClientDto);
       await this.refreshTokenService.replaceFrom(createClientDto);
 
-      return `${chalk.green(
-        '✔',
-      )} Successfully initialized Lyricstify configuration, you can now run ${chalk.inverse(
-        'lyricstify start',
-      )} and start singing!`;
+      return {
+        status: 'SUCCESS',
+        message: `${chalk.green(
+          '✔',
+        )} Successfully initialized Lyricstify configuration, you can now run ${chalk.inverse(
+          'lyricstify start',
+        )} and start singing!`,
+      };
     } catch (e) {
       const message = (() => {
         if (typeof e === 'string') {
@@ -51,7 +56,10 @@ export class InitializeService {
         return 'An error occurred, please try again.';
       })();
 
-      return chalk.red(`✘ ${message}`);
+      return {
+        status: 'ERROR',
+        message: chalk.redBright(`✘ ${message}`),
+      };
     }
   }
 
