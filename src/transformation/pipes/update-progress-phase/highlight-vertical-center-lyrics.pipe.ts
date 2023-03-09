@@ -1,7 +1,7 @@
 import { UpdateProgressPipeFunction } from '../../interfaces/update-progress-pipe-function.interface.js';
 
 export const highlightActiveLyricsCenteredVertically = (
-  markup = '^B',
+  markup = '^+',
 ): UpdateProgressPipeFunction => {
   return ({ lyrics, options }) => {
     const halfHeight = Math.floor(options.maxHeight / 2);
