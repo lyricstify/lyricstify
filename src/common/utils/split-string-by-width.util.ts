@@ -1,4 +1,4 @@
-import * as terminalKit from 'terminal-kit';
+import terminalKit from 'terminal-kit';
 
 export const splitStringByWidth = (
   text: string,

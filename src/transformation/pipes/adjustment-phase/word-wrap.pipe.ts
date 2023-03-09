@@ -1,4 +1,4 @@
-import * as terminalKit from 'terminal-kit';
+import terminalKit from 'terminal-kit';
 import { splitStringByWidth } from '../../../common/utils/split-string-by-width.util.js';
 import { AdjustmentPipeFunction } from '../../interfaces/adjustment-pipe-function.interface.js';
 

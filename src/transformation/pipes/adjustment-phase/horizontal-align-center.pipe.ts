@@ -1,4 +1,4 @@
-import * as terminalKit from 'terminal-kit';
+import terminalKit from 'terminal-kit';
 import { AdjustmentPipeFunction } from '../../interfaces/adjustment-pipe-function.interface.js';
 
 export const horizontalAlignCenter = (
