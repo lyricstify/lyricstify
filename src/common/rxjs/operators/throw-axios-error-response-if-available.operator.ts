@@ -6,11 +6,19 @@ export const throwAxiosErrorResponseIfAvailable = <
 >(): MonoTypeOperatorFunction<T> =>
   pipe(
     catchError(
-      (error: AxiosError<{ error: string; error_description: string }>) =>
+      (
+        error: AxiosError<{
+          error: { message: string } | string;
+          error_description: string;
+        }>,
+      ) =>
         throwError(
           () =>
             new Error(
               `Failed to get refresh token data. Message: ${
+                (typeof error.response?.data.error === 'object'
+                  ? error.response?.data.error.message
+                  : '') ||
                 error.response?.data.error_description ||
                 error.response?.data.error ||
                 error.response?.statusText ||
