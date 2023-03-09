@@ -65,14 +65,14 @@ export class TokenService {
 
   async findOneOrCreateFromExistingRefreshToken() {
     const token = await this.findOne();
-    const isExpired =
-      token === null
-        ? true
-        : token.expiresInSeconds * 1000 + token.createdAt >=
-          new Date().getTime();
 
-    if (isExpired === false) {
-      return token;
+    if (token !== null) {
+      const isExpired =
+        token.expiresInSeconds * 1000 + token.createdAt <= new Date().getTime();
+
+      if (isExpired === false) {
+        return token;
+      }
     }
 
     const refreshToken = await this.refreshTokenService.findOneOrFail();
