@@ -1,7 +1,5 @@
 import { EventEmitter } from 'stream';
-import 'terminal-kit';
-import { Rect } from 'terminal-kit';
-import { ScreenBuffer, TextBuffer } from 'terminal-kit';
+import { Rect, ScreenBuffer, TextBuffer } from 'terminal-kit';
 
 // TODO: Add missing document model classes, methods, and interfaces. Open PR to DefinitelyTyped.
 declare module 'terminal-kit' {
@@ -108,7 +106,7 @@ declare module 'terminal-kit' {
     noDraw?: boolean;
   }
 
-  class Element {
+  export class Element {
     constructor(options: ElementOptions);
     /**
      * Updates the z-index of the element and triggers all internal mechanism needed.
@@ -241,7 +239,7 @@ declare module 'terminal-kit' {
     backgroundAttr?: number | object;
   }
 
-  class Container extends Element {
+  export class Container extends Element {
     /**
      * This property holds the underlying screenBuffer object. It can be used to achieve more complex stuffs.
      */
@@ -341,7 +339,7 @@ declare module 'terminal-kit' {
     noDraw?: boolean;
   }
 
-  class Document extends Container {
+  export class Document extends Container {
     constructor(options: DocumentOptions & ContainerOptions);
     /**
      * Give the focus to an Element.
@@ -448,7 +446,7 @@ declare module 'terminal-kit' {
     hiddenContent?: string | null;
   }
 
-  class TextBox extends Element {
+  export class TextBox extends Element {
     /**
      * The underlying TextBuffer object.
      */
