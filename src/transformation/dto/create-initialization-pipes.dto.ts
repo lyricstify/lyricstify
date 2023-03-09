@@ -1,22 +1,25 @@
 export class CreateInitializationPipesDto {
-  spaceBetweenLines: number;
+  spaceBetweenLines: number | false;
   romanizeJapaneseSentences: boolean;
   translateSentences: string | false;
 
   constructor({
-    spaceBetweenLines = null,
+    spaceBetweenLines = false,
     romanizeJapaneseSentences = false,
     translateSentences = false,
   }: Partial<
     Omit<CreateInitializationPipesDto, 'spaceBetweenLines'> & {
-      spaceBetweenLines: null | number;
+      spaceBetweenLines: false | number | undefined;
     }
   >) {
-    this.spaceBetweenLines =
-      spaceBetweenLines ||
-      (romanizeJapaneseSentences !== false || translateSentences !== false
-        ? 1
-        : 0);
+    if (spaceBetweenLines === undefined) {
+      this.spaceBetweenLines =
+        romanizeJapaneseSentences !== false || translateSentences !== false
+          ? 1
+          : false;
+    } else {
+      this.spaceBetweenLines = spaceBetweenLines;
+    }
     this.romanizeJapaneseSentences = romanizeJapaneseSentences;
     this.translateSentences = translateSentences;
   }

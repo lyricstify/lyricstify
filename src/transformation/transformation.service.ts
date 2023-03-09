@@ -20,9 +20,6 @@ export class TransformationService {
   ): InitializationPipeFunction[] {
     return ([] as InitializationPipeFunction[])
       .concat(
-        addSpaceBetweenLines(createInitializationPipeDto.spaceBetweenLines),
-      )
-      .concat(
         createInitializationPipeDto.romanizeJapaneseSentences === true
           ? romanizeJapaneseSentences
           : [],
@@ -30,6 +27,11 @@ export class TransformationService {
       .concat(
         createInitializationPipeDto.translateSentences !== false
           ? translateSentences(createInitializationPipeDto.translateSentences)
+          : [],
+      )
+      .concat(
+        createInitializationPipeDto.spaceBetweenLines !== false
+          ? addSpaceBetweenLines(createInitializationPipeDto.spaceBetweenLines)
           : [],
       );
   }
