@@ -9,7 +9,7 @@ import { TrackResponseInterface } from './interfaces/track-response.inteface.js'
 @Injectable()
 export class LyricService {
   private readonly lyricApiOriginPath =
-    'https://api.lyricstify.vercel.app/v1/lyrics/';
+    'https://api.lyricstify.vercel.app/v1/lyrics';
 
   constructor(private readonly httpService: HttpService) {}
 
