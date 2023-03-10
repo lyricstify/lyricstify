@@ -24,8 +24,8 @@ export class StartService {
     romaji: romanizeJapaneseSentences,
     verticalSpacing: spaceBetweenLines,
     translateTo: translateSentences,
-    indentationChar,
     highlightMarkup,
+    horizontalAlign,
   }: StartOptionsDto) {
     const { terminal, textBox } = this.terminalKitService.spawn();
     const keypress$ = this.terminalKeypressEvent.run({ terminal });
@@ -41,7 +41,7 @@ export class StartService {
       ),
       adjustmentPipes: this.transformationService.adjustmentPipesFrom(
         new CreateAdjustmentPipesDto({
-          indentationChar,
+          horizontalAlign,
         }),
       ),
       updateProgressPipes: this.transformationService.updateProgressPipesFrom(

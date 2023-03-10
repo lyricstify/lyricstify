@@ -1,7 +1,9 @@
-export class CreateAdjustmentPipesDto {
-  indentationChar: string;
+import { HorizontalAlignChoicesType } from '../types/horizontal-align-choices.type.js';
 
-  constructor({ indentationChar = ' ' }: Partial<CreateAdjustmentPipesDto>) {
-    this.indentationChar = indentationChar;
+export class CreateAdjustmentPipesDto {
+  horizontalAlign: HorizontalAlignChoicesType;
+
+  constructor({ horizontalAlign }: CreateAdjustmentPipesDto) {
+    this.horizontalAlign = horizontalAlign;
   }
 }

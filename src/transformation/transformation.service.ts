@@ -6,6 +6,7 @@ import { AdjustmentPipeFunction } from './interfaces/adjustment-pipe-function.in
 import { InitializationPipeFunction } from './interfaces/initialization-pipe-function.interface.js';
 import { UpdateProgressPipeFunction } from './interfaces/update-progress-pipe-function.interface.js';
 import { horizontalAlignCenter } from './pipes/adjustment-phase/horizontal-align-center.pipe.js';
+import { horizontalAlignRight } from './pipes/adjustment-phase/horizontal-align-right.pipe.js';
 import { verticalAlignCenter } from './pipes/adjustment-phase/vertical-align-center.pipe.js';
 import { wordWrap } from './pipes/adjustment-phase/word-wrap.pipe.js';
 import { addSpaceBetweenLines } from './pipes/initialization-phase/add-spaces-between-lines.pipe.js';
@@ -39,11 +40,17 @@ export class TransformationService {
   adjustmentPipesFrom(
     createAdjustmentPipesDto: CreateAdjustmentPipesDto,
   ): AdjustmentPipeFunction[] {
-    return [
-      wordWrap,
-      horizontalAlignCenter(createAdjustmentPipesDto.indentationChar),
-      verticalAlignCenter,
-    ];
+    return ([wordWrap, verticalAlignCenter] as AdjustmentPipeFunction[])
+      .concat(
+        createAdjustmentPipesDto.horizontalAlign === 'center'
+          ? horizontalAlignCenter
+          : [],
+      )
+      .concat(
+        createAdjustmentPipesDto.horizontalAlign === 'right'
+          ? horizontalAlignRight
+          : [],
+      );
   }
 
   updateProgressPipesFrom(

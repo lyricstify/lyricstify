@@ -1,9 +1,7 @@
 export class CreateUpdateProgressPipesDto {
   highlightMarkup: string;
 
-  constructor({
-    highlightMarkup = '^+',
-  }: Partial<CreateUpdateProgressPipesDto>) {
+  constructor({ highlightMarkup }: CreateUpdateProgressPipesDto) {
     this.highlightMarkup = highlightMarkup;
   }
 }

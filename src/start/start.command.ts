@@ -1,8 +1,14 @@
 import chalk from 'chalk';
-import { Command, CommandRunner, Option } from 'nest-commander';
+import {
+  Command,
+  CommandRunner,
+  Option,
+  OptionChoiceFor,
+} from 'nest-commander';
 import { StartOptionsDto } from './dto/start-options.dto.js';
 import { StartOptionsInterface } from './interfaces/start-options.interface.js';
 import { StartService } from './start.service.js';
+import { HorizontalAlignChoicesType } from '../transformation/types/horizontal-align-choices.type.js';
 
 @Command({
   name: 'start',
@@ -91,13 +97,32 @@ export class StartCommand extends CommandRunner {
   }
 
   @Option({
-    flags: '--indentation-char <indentation-char>',
-    defaultValue: ' ',
+    flags: '--horizontal-align <horizontal-align>',
+    defaultValue: 'center',
     description:
       'Characters for indentation of vertically aligned center lyrics.',
+    choices: true,
+    name: 'horizontal align choices',
   })
-  parseIndentationChar(val: string) {
+  parseHorizontalAlign(val: string) {
+    const choices = this.chosenForHorizontalAlignChoices();
+
+    if (this.isPartOfHorizontalAlignChoices(val) === false) {
+      throw new Error(
+        chalk.redBright(
+          `<horizontal-align> should be one of the following options: ${choices.join(
+            ', ',
+          )}.`,
+        ),
+      );
+    }
+
     return val;
+  }
+
+  @OptionChoiceFor({ name: 'horizontal align choices' })
+  chosenForHorizontalAlignChoices(): HorizontalAlignChoicesType[] {
+    return ['center', 'left', 'right'];
   }
 
   @Option({
@@ -108,5 +133,13 @@ export class StartCommand extends CommandRunner {
   })
   parseHighlightMarkup(val: string) {
     return val;
+  }
+
+  private isPartOfHorizontalAlignChoices(
+    val: string,
+  ): val is HorizontalAlignChoicesType {
+    return this.chosenForHorizontalAlignChoices().includes(
+      val as HorizontalAlignChoicesType,
+    );
   }
 }

@@ -4,14 +4,12 @@ export class CreateInitializationPipesDto {
   translateSentences: string | false;
 
   constructor({
-    spaceBetweenLines = false,
-    romanizeJapaneseSentences = false,
-    translateSentences = false,
-  }: Partial<
-    Omit<CreateInitializationPipesDto, 'spaceBetweenLines'> & {
-      spaceBetweenLines: false | number | undefined;
-    }
-  >) {
+    spaceBetweenLines,
+    romanizeJapaneseSentences,
+    translateSentences,
+  }: Omit<CreateInitializationPipesDto, 'spaceBetweenLines'> & {
+    spaceBetweenLines: false | number | undefined;
+  }) {
     if (spaceBetweenLines === undefined) {
       this.spaceBetweenLines =
         romanizeJapaneseSentences !== false || translateSentences !== false
