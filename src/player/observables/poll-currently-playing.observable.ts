@@ -42,14 +42,18 @@ export class PollCurrentlyPlayingObservable implements ObservableRunner {
     return of({}).pipe(
       concatMap(() => from(this.playerService.currentlyPlaying())),
       sharedPairwise(),
-      concatMap(this.generateTrackState$(lyricsInitializationPipes)),
+      concatMap(
+        this.generateTrackStateOrSkipEmitsToObserversIfUnchanged$(
+          lyricsInitializationPipes,
+        ),
+      ),
       sharedScan(this.updateTrackState, new CurrentlyPlayingState({})),
       repeat({ delay }),
       share(this.createSharedSubjectConfiguration()),
     );
   }
 
-  private generateTrackState$(
+  private generateTrackStateOrSkipEmitsToObserversIfUnchanged$(
     pipes: MonoTypeOperatorFunction<LineResponseInterface[]>[],
   ) {
     return ([prev, current]: [
@@ -118,14 +122,14 @@ export class PollCurrentlyPlayingObservable implements ObservableRunner {
       return new CurrentlyPlayingState({
         ...val,
         lyrics: acc.lyrics,
-        activeLyricIndex: acc.getCurrentLyricIndex(progress),
+        activeLyricIndex: acc.currentLyricIndexByProgressTime(progress),
         progress,
       });
     }
 
     return new CurrentlyPlayingState({
       ...val,
-      activeLyricIndex: val.getCurrentLyricIndex(progress),
+      activeLyricIndex: val.currentLyricIndexByProgressTime(progress),
       progress,
     });
   }

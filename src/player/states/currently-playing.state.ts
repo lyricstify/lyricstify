@@ -22,7 +22,7 @@ export class CurrentlyPlayingState {
     timestamp = new Date().getTime(),
     activeLyricIndex = null,
   }: Partial<
-    Omit<CurrentlyPlayingState, 'getCurrentLyricIndex' | 'nextLyric'>
+    Omit<CurrentlyPlayingState, 'currentLyricIndexByProgressTime' | 'nextLyric'>
   >) {
     this.isActive = isActive;
     this.isPlaying = isPlaying;
@@ -35,10 +35,10 @@ export class CurrentlyPlayingState {
     this.activeLyricIndex = activeLyricIndex;
   }
 
-  getCurrentLyricIndex(progress: number) {
+  currentLyricIndexByProgressTime(progress: number) {
     const lastLyric = this.lyrics.at(-1);
 
-    if (lastLyric !== undefined && progress > lastLyric.startTimeMs) {
+    if (lastLyric !== undefined && progress >= lastLyric.startTimeMs) {
       return this.lyrics.length - 1;
     }
 
