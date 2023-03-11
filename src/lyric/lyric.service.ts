@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { firstValueFrom, map } from 'rxjs';
 import { throwAxiosErrorResponseIfAvailable } from '../common/rxjs/operators/throw-axios-error-response-if-available.operator.js';
 import { LyricDto } from './dto/lyric.dto.js';
-import { TrackResponseInterface } from './interfaces/track-response.inteface.js';
+import { TrackResponseInterface } from './interfaces/track-response.interface.js';
 
 @Injectable()
 export class LyricService {
