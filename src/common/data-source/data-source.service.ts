@@ -8,7 +8,9 @@ import { DataSourceRepository } from './data-source.repository.js';
 
 @Injectable()
 export class DataSourceService {
-  private readonly configDir = join(homedir(), '.config', 'lyricstify');
+  constructor(
+    private readonly configDir = join(homedir(), '.config', 'lyricstify'),
+  ) {}
 
   access<T = unknown>(relativeFilePath: string) {
     if (existsSync(this.configDir) === false) {
