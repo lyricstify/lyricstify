@@ -1,5 +1,5 @@
-import chalk from 'chalk';
 import { Command, CommandRunner, Option } from 'nest-commander';
+import { CommandValidationService } from '../command-validation/command-validation.service.js';
 import { PipeOptionsDto } from './dto/pipe-options.dto.js';
 import { PipeOptionsInterface } from './interfaces/pipe-options.interface.js';
 import { PipeService } from './pipe.service.js';
@@ -9,17 +9,15 @@ import { PipeService } from './pipe.service.js';
   description: 'Send currently Lyricstify active lyrics to stdout',
 })
 export class PipeCommand extends CommandRunner {
-  constructor(private readonly pipeService: PipeService) {
+  constructor(
+    private readonly pipeService: PipeService,
+    private readonly commandValidationService: CommandValidationService,
+  ) {
     super();
   }
 
   async run(inputs: string[], options: PipeOptionsInterface) {
-    if (inputs.length !== 0) {
-      throw new Error(
-        chalk.redBright(`${inputs.join(',')} is not valid command!`),
-      );
-    }
-
+    this.commandValidationService.validateInputsCommandOrFail(inputs);
     this.pipeService.orchestra(new PipeOptionsDto(options));
   }
 
@@ -40,19 +38,9 @@ export class PipeCommand extends CommandRunner {
       'Sets delay time (in ms) between HTTP requests to the Spotify API.',
   })
   parseDelay(val: string) {
-    if (Number.isInteger(val) === false) {
-      throw new Error(chalk.redBright('<delay> should be a valid number'));
-    }
-
     const delay = Number(val);
 
-    if (delay < 100) {
-      throw new Error(
-        chalk.redBright(
-          '<delay> should be a positive integer with a minimum value of 100.',
-        ),
-      );
-    }
+    this.commandValidationService.validateDelayOptionOrFail(delay);
 
     return delay;
   }

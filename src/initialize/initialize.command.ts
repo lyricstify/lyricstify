@@ -7,6 +7,7 @@ import {
 } from 'nest-commander';
 import ora from 'ora';
 import terminalLink from 'terminal-link';
+import { CommandValidationService } from '../command-validation/command-validation.service.js';
 import { InitializeOptionsDto } from './dto/initialize-options.dto.js';
 import { RequestAuthorizationDto } from './dto/request-authorization.dto.js';
 import { InitializeService } from './initialize.service.js';
@@ -17,16 +18,13 @@ export class InitializeCommand extends CommandRunner {
   constructor(
     private readonly inquirerService: InquirerService,
     private readonly initializeService: InitializeService,
+    private readonly commandValidationService: CommandValidationService,
   ) {
     super();
   }
 
   async run(inputs: string[], options: InitializeOptionsInterface) {
-    if (inputs.length !== 0) {
-      throw new Error(
-        chalk.redBright(`${inputs.join(',')} is not valid command!`),
-      );
-    }
+    this.commandValidationService.validateInputsCommandOrFail(inputs);
 
     const answers = await this.inquirerService.ask('initialize', options);
 
@@ -60,9 +58,9 @@ export class InitializeCommand extends CommandRunner {
     loading.stop();
 
     if (result.status === 'SUCCESS') {
-      console.info(result);
+      console.info(result.message);
     } else {
-      console.error(result);
+      console.error(result.message);
     }
   }
 
@@ -72,6 +70,11 @@ export class InitializeCommand extends CommandRunner {
       'The client ID for your app, available from the Spotify developer dashboard.',
   })
   parseClientId(val: string) {
+    this.commandValidationService.validateSpotifyClientIdentityOrFail(
+      val,
+      'id',
+    );
+
     return val;
   }
 
@@ -81,6 +84,11 @@ export class InitializeCommand extends CommandRunner {
       'The secret key for authenticating the app to access your Spotify account.',
   })
   parseClientSecret(val: string) {
+    this.commandValidationService.validateSpotifyClientIdentityOrFail(
+      val,
+      'password',
+    );
+
     return val;
   }
 
@@ -90,6 +98,12 @@ export class InitializeCommand extends CommandRunner {
       'The URI port to redirect to after the user grants or denies permission.',
   })
   parseRedirectUriPort(val: string) {
-    return val;
+    const redirectUriPort = Number(val);
+
+    this.commandValidationService.validateRedirectUriPortOrFail(
+      redirectUriPort,
+    );
+
+    return redirectUriPort;
   }
 }

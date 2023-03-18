@@ -9,11 +9,15 @@ import {
 } from 'nest-commander';
 import terminalLink from 'terminal-link';
 import { ClientService } from '../client/client.service.js';
+import { CommandValidationService } from '../command-validation/command-validation.service.js';
 import { InitializeOptionsInterface } from './interfaces/initialize-options.interface.js';
 
 @QuestionSet({ name: 'initialize' })
 export class InitializeQuestion {
-  constructor(private readonly clientService: ClientService) {}
+  constructor(
+    private readonly clientService: ClientService,
+    private readonly commandValidationService: CommandValidationService,
+  ) {}
 
   @Question({
     type: 'list',
@@ -64,7 +68,10 @@ export class InitializeQuestion {
 
   @ValidateFor({ name: 'clientId' })
   validateClientId(value: string) {
-    if (this.validateSpotifyClientIdOrPassword(value) === false) {
+    if (
+      this.commandValidationService.validateSpotifyClientIdentity(value) ===
+      false
+    ) {
       return 'Please fill in a valid client id!';
     }
 
@@ -87,7 +94,10 @@ export class InitializeQuestion {
 
   @ValidateFor({ name: 'clientSecret' })
   validateClientSecret(value: string) {
-    if (this.validateSpotifyClientIdOrPassword(value) === false) {
+    if (
+      this.commandValidationService.validateSpotifyClientIdentity(value) ===
+      false
+    ) {
       return 'Please fill in a valid client secret!';
     }
 
@@ -111,7 +121,12 @@ export class InitializeQuestion {
 
   @ValidateFor({ name: 'redirectUriPort' })
   validateRedirectUriPort(value: string) {
-    if (Number.isNaN(Number(value)) === true) {
+    const redirectUriPort = Number(value);
+
+    if (
+      this.commandValidationService.validateRedirectUriPort(redirectUriPort) ===
+      false
+    ) {
       return 'Please fill in a valid redirect URI!';
     }
 
@@ -120,9 +135,5 @@ export class InitializeQuestion {
 
   private async isConfigurationAlreadyExists() {
     return (await this.clientService.findOne()) !== null;
-  }
-
-  private validateSpotifyClientIdOrPassword(value: string) {
-    return /^[a-zA-Z0-9]{32}$/.test(value);
   }
 }

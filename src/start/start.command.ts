@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import {
   Command,
   CommandRunner,
@@ -8,24 +7,22 @@ import {
 import { StartOptionsDto } from './dto/start-options.dto.js';
 import { StartOptionsInterface } from './interfaces/start-options.interface.js';
 import { StartService } from './start.service.js';
-import { HorizontalAlignChoicesType } from '../transformation/types/horizontal-align-choices.type.js';
+import { CommandValidationService } from '../command-validation/command-validation.service.js';
 
 @Command({
   name: 'start',
   description: 'Start Lyricstify to show lyrics in your terminal',
 })
 export class StartCommand extends CommandRunner {
-  constructor(private readonly startService: StartService) {
+  constructor(
+    private readonly startService: StartService,
+    private readonly commandValidationService: CommandValidationService,
+  ) {
     super();
   }
 
   async run(inputs: string[], options: StartOptionsInterface) {
-    if (inputs.length !== 0) {
-      throw new Error(
-        chalk.redBright(`${inputs.join(',')} is not valid command!`),
-      );
-    }
-
+    this.commandValidationService.validateInputsCommandOrFail(inputs);
     this.startService.orchestra(new StartOptionsDto(options));
   }
 
@@ -45,19 +42,11 @@ export class StartCommand extends CommandRunner {
       'Sets amount of vertical space between lines of lyrics. (default: 0 or 1 if using romaji or translation)',
   })
   parseVerticalSpacing(val: string) {
-    if (Number.isInteger(val) === false) {
-      throw new Error(
-        chalk.redBright('<vertical-spacing> should be a valid number'),
-      );
-    }
-
     const verticalSpacing = Number(val);
 
-    if (verticalSpacing < 0) {
-      throw new Error(
-        chalk.redBright('<vertical-spacing> should be a positive integer'),
-      );
-    }
+    this.commandValidationService.validateVerticalSpacingOptionOrFail(
+      verticalSpacing,
+    );
 
     return verticalSpacing;
   }
@@ -69,19 +58,9 @@ export class StartCommand extends CommandRunner {
       'Sets delay time (in ms) between HTTP requests to the Spotify API.',
   })
   parseDelay(val: string) {
-    if (Number.isInteger(val) === false) {
-      throw new Error(chalk.redBright('<delay> should be a valid number'));
-    }
-
     const delay = Number(val);
 
-    if (delay < 100) {
-      throw new Error(
-        chalk.redBright(
-          '<delay> should be a positive integer with a minimum value of 100.',
-        ),
-      );
-    }
+    this.commandValidationService.validateDelayOptionOrFail(delay);
 
     return delay;
   }
@@ -105,24 +84,14 @@ export class StartCommand extends CommandRunner {
     name: 'horizontal align choices',
   })
   parseHorizontalAlign(val: string) {
-    const choices = this.chosenForHorizontalAlignChoices();
-
-    if (this.isPartOfHorizontalAlignChoices(val) === false) {
-      throw new Error(
-        chalk.redBright(
-          `<horizontal-align> should be one of the following options: ${choices.join(
-            ', ',
-          )}.`,
-        ),
-      );
-    }
+    this.commandValidationService.validateHorizontalAlignOptionOrFail(val);
 
     return val;
   }
 
   @OptionChoiceFor({ name: 'horizontal align choices' })
-  chosenForHorizontalAlignChoices(): HorizontalAlignChoicesType[] {
-    return ['center', 'left', 'right'];
+  chosenForHorizontalAlignChoices() {
+    return this.commandValidationService.horizontalAlignChoices();
   }
 
   @Option({
@@ -133,13 +102,5 @@ export class StartCommand extends CommandRunner {
   })
   parseHighlightMarkup(val: string) {
     return val;
-  }
-
-  private isPartOfHorizontalAlignChoices(
-    val: string,
-  ): val is HorizontalAlignChoicesType {
-    return this.chosenForHorizontalAlignChoices().includes(
-      val as HorizontalAlignChoicesType,
-    );
   }
 }
