@@ -82,7 +82,8 @@ export class TokenService {
       }
     }
 
-    const refreshToken = await this.refreshTokenService.findOneOrFail();
+    const refreshToken =
+      await this.refreshTokenService.findOneOrCreateFromExistingClient();
     return await this.replaceFrom(refreshToken);
   }
 

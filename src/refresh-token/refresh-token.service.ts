@@ -8,6 +8,7 @@ import { DataSourceRepository } from '../common/data-source/data-source.reposito
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto.js';
 import { RefreshTokenEntity } from './entities/refresh-token.entity.js';
 import { RequestAccessTokenResponseInterface } from './interfaces/request-access-token-response.interface.js';
+import { ClientService } from '../client/client.service.js';
 import { ConfigService } from '../config/config.service.js';
 
 @Injectable()
@@ -18,6 +19,7 @@ export class RefreshTokenService {
   constructor(
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
+    private readonly clientService: ClientService,
     private readonly refreshTokenRepository: DataSourceRepository<RefreshTokenEntity>,
   ) {}
 
@@ -69,6 +71,17 @@ export class RefreshTokenService {
     }
 
     return refreshToken;
+  }
+
+  async findOneOrCreateFromExistingClient() {
+    const refreshToken = await this.findOne();
+
+    if (refreshToken !== null) {
+      return refreshToken;
+    }
+
+    const client = await this.clientService.findOneOrFail();
+    return await this.replaceFrom(client);
   }
 
   private convertToCreateRefreshTokenDto(buffer: string) {
