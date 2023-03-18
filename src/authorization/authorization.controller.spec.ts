@@ -5,6 +5,7 @@ import { AuthorizationService } from './authorization.service.js';
 
 describe('AuthorizationController', () => {
   let authorizationController: AuthorizationController;
+  let authorizationService: AuthorizationService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -12,7 +13,7 @@ describe('AuthorizationController', () => {
     })
       .useMocker((token) => {
         if (token === AuthorizationService) {
-          return { validate: jest.fn().mockReturnValue('Success') };
+          return { validate: jest.fn() };
         }
 
         return {};
@@ -20,10 +21,13 @@ describe('AuthorizationController', () => {
       .compile();
 
     authorizationController = module.get(AuthorizationController);
+    authorizationService = module.get(AuthorizationService);
   });
 
   describe('index', () => {
     it('should be able to return value from the validation authorization service', () => {
+      jest.spyOn(authorizationService, 'validate').mockReturnValue('Success');
+
       expect(authorizationController.index({})).toBe('Success');
     });
   });

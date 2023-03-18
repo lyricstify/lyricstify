@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { jest } from '@jest/globals';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthorizationService } from './authorization.service.js';
@@ -14,11 +15,11 @@ describe('AuthorizationService', () => {
   });
 
   describe('validate', () => {
-    jest.useFakeTimers();
+    it('should be able to emit value to the next method in subscriber if authorization dto contains the defined code', (done) => {
+      const code = faker.random.alphaNumeric(260, { casing: 'mixed' });
+      jest.useFakeTimers();
 
-    it('should be able to mark subject $event as a success if authorization dto contains the defined code', (done) => {
-      const code = Math.random().toString(36).substring(2);
-
+      authorizationService.validate({ code });
       authorizationService.event$.subscribe({
         next: (val) => {
           expect(val).toBe(code);
@@ -26,11 +27,13 @@ describe('AuthorizationService', () => {
         },
       });
 
-      authorizationService.validate({ code });
       jest.runAllTimers();
     });
 
-    it('should be able to mark subject $event as an error if authorization dto does not contain code', (done) => {
+    it('should be able to emit an error message to the error method in subscriber if authorization dto does not contain code', (done) => {
+      jest.useFakeTimers();
+
+      authorizationService.validate({});
       authorizationService.event$.subscribe({
         error: (val) => {
           expect(val).toBe('Authorization validation failed.');
@@ -38,7 +41,6 @@ describe('AuthorizationService', () => {
         },
       });
 
-      authorizationService.validate({});
       jest.runAllTimers();
     });
   });
