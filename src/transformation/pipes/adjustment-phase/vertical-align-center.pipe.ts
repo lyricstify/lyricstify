@@ -5,7 +5,7 @@ export const verticalAlignCenter: AdjustmentPipeFunction = ({
   options,
 }) => {
   const halfHeight = Math.floor(options.maxHeight / 2);
-  const verticalPadding: string[][] = Array(halfHeight).fill([['']]);
+  const verticalPadding: string[][] = Array(halfHeight).fill(['']);
   const alignedLyrics = [...verticalPadding, ...lyrics, ...verticalPadding];
 
   return { lyrics: alignedLyrics, options };
