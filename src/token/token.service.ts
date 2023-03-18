@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { firstValueFrom, map } from 'rxjs';
+import { firstValueFrom, map, retry } from 'rxjs';
 import { throwAxiosErrorResponseIfAvailable } from '../common/rxjs/operators/throw-axios-error-response-if-available.operator.js';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service.js';
 import { DataSourceRepository } from '../common/data-source/data-source.repository.js';
@@ -9,6 +9,7 @@ import { RefreshTokenEntity } from '../refresh-token/entities/refresh-token.enti
 import { CreateTokenDto } from './dto/create-token.dto.js';
 import { TokenEntity } from './entities/token.entity.js';
 import { RequestTokenResponseInterface } from './interfaces/request-token-response.interface.js';
+import { ConfigService } from '../config/config.service.js';
 
 @Injectable()
 export class TokenService {
@@ -16,8 +17,9 @@ export class TokenService {
     'https://accounts.spotify.com/api/token';
 
   constructor(
-    private readonly tokenRepository: DataSourceRepository<TokenEntity>,
+    private readonly configService: ConfigService,
     private readonly httpService: HttpService,
+    private readonly tokenRepository: DataSourceRepository<TokenEntity>,
     private readonly refreshTokenService: RefreshTokenService,
   ) {}
 
@@ -28,6 +30,7 @@ export class TokenService {
     });
 
     const config: AxiosRequestConfig = {
+      timeout: this.configService.timeout,
       headers: {
         Authorization: `Basic ${refreshToken.buffer}`,
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -41,8 +44,12 @@ export class TokenService {
         config,
       )
       .pipe(
+        retry({
+          delay: this.configService.retryDelay,
+          count: this.configService.retryCount,
+        }),
         map(this.convertToCreateTokenDto),
-        throwAxiosErrorResponseIfAvailable(),
+        throwAxiosErrorResponseIfAvailable(this.constructor.name),
       );
 
     const createTokenDto = await firstValueFrom(request$);

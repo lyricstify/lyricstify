@@ -4,9 +4,10 @@ import { DataSourceRepository } from '../common/data-source/data-source.reposito
 import { DataSourceService } from '../common/data-source/data-source.service.js';
 import { DataSourceModule } from '../common/data-source/data-source.module.js';
 import { RefreshTokenService } from './refresh-token.service.js';
+import { ConfigModule } from '../config/config.module.js';
 
 @Module({
-  imports: [DataSourceModule, HttpModule],
+  imports: [ConfigModule, HttpModule, DataSourceModule],
   providers: [
     RefreshTokenService,
     {

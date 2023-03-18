@@ -1,5 +1,6 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '../config/config.module.js';
 import { LyricModule } from '../lyric/lyric.module.js';
 import { TokenModule } from '../token/token.module.js';
 import { GraduallyUpdateProgressObservable } from './observables/gradually-update-progress.observable.js';
@@ -7,7 +8,7 @@ import { PollCurrentlyPlayingObservable } from './observables/poll-currently-pla
 import { PlayerService } from './player.service.js';
 
 @Module({
-  imports: [HttpModule, TokenModule, LyricModule],
+  imports: [ConfigModule, HttpModule, TokenModule, LyricModule],
   providers: [
     PlayerService,
     PollCurrentlyPlayingObservable,

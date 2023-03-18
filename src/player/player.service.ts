@@ -1,8 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { firstValueFrom, map } from 'rxjs';
+import { firstValueFrom, map, retry } from 'rxjs';
 import { throwAxiosErrorResponseIfAvailable } from '../common/rxjs/operators/throw-axios-error-response-if-available.operator.js';
+import { ConfigService } from '../config/config.service.js';
 import { TokenService } from '../token/token.service.js';
 import { CurrentlyPlayingDto } from './dto/currently-playing.dto.js';
 
@@ -14,12 +15,14 @@ export class PlayerService {
   constructor(
     private readonly httpService: HttpService,
     private readonly tokenService: TokenService,
+    private readonly configService: ConfigService,
   ) {}
 
   async currentlyPlaying() {
     const token =
       await this.tokenService.findOneOrCreateFromExistingRefreshToken();
     const config: AxiosRequestConfig = {
+      timeout: this.configService.timeout,
       headers: {
         Authorization: `Bearer ${token.value}`,
         'Content-Type': 'application/json',
@@ -33,8 +36,12 @@ export class PlayerService {
         config,
       )
       .pipe(
+        retry({
+          delay: this.configService.retryDelay,
+          count: this.configService.retryCount,
+        }),
         map(this.convertToCurrentlyPlayingDto),
-        throwAxiosErrorResponseIfAvailable(),
+        throwAxiosErrorResponseIfAvailable(this.constructor.name),
       );
 
     return await firstValueFrom(request$);

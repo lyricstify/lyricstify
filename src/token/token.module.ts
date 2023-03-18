@@ -5,9 +5,10 @@ import { DataSourceModule } from '../common/data-source/data-source.module.js';
 import { DataSourceRepository } from '../common/data-source/data-source.repository.js';
 import { DataSourceService } from '../common/data-source/data-source.service.js';
 import { TokenService } from './token.service.js';
+import { ConfigModule } from '../config/config.module.js';
 
 @Module({
-  imports: [DataSourceModule, HttpModule, RefreshTokenModule],
+  imports: [ConfigModule, DataSourceModule, HttpModule, RefreshTokenModule],
   providers: [
     TokenService,
     {
