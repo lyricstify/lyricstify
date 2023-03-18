@@ -12,7 +12,7 @@ import { wordWrap } from './pipes/adjustment-phase/word-wrap.pipe.js';
 import { addSpaceBetweenLines } from './pipes/initialization-phase/add-spaces-between-lines.pipe.js';
 import { romanizeJapaneseSentences } from './pipes/initialization-phase/romanize-japanese-sentences.pipe.js';
 import { translateSentences } from './pipes/initialization-phase/translate-sentences.pipe.js';
-import { highlightActiveLyricsCenteredVertically } from './pipes/update-progress-phase/highlight-vertical-center-lyrics.pipe.js';
+import { highlightVerticallyCenteredLyrics } from './pipes/update-progress-phase/highlight-vertically-centered-lyrics.pipe.js';
 
 @Injectable()
 export class TransformationService {
@@ -57,7 +57,7 @@ export class TransformationService {
     createUpdateProgressPipesDto: CreateUpdateProgressPipesDto,
   ): UpdateProgressPipeFunction[] {
     return [
-      highlightActiveLyricsCenteredVertically(
+      highlightVerticallyCenteredLyrics(
         createUpdateProgressPipesDto.highlightMarkup,
       ),
     ];

@@ -1,6 +1,6 @@
 import { UpdateProgressPipeFunction } from '../../interfaces/update-progress-pipe-function.interface.js';
 
-export const highlightActiveLyricsCenteredVertically = (
+export const highlightVerticallyCenteredLyrics = (
   markup: string,
 ): UpdateProgressPipeFunction => {
   return ({ lyrics, options }) => {
