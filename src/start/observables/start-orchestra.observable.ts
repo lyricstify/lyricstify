@@ -10,7 +10,10 @@ import {
 } from 'rxjs';
 import terminalKit from 'terminal-kit';
 import { ObservableRunner } from '../../common/interfaces/observable-runner.interface.js';
-import { pipeline, PipelineFunction } from '../../common/utils/pipeline.js';
+import {
+  pipeline,
+  PipelineFunction,
+} from '../../common/utils/pipeline.util.js';
 import { GraduallyUpdateProgressObservable } from '../../player/observables/gradually-update-progress.observable.js';
 import { PollCurrentlyPlayingObservable } from '../../player/observables/poll-currently-playing.observable.js';
 import { CurrentlyPlayingState } from '../../player/states/currently-playing.state.js';
