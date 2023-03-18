@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import chalk from 'chalk';
 import { DataSourceRepository } from '../common/data-source/data-source.repository.js';
 import { CreateClientDto } from './dto/create-client-dto.js';
 import { ClientEntity } from './entities/client.entity.js';
@@ -21,7 +22,11 @@ export class ClientService {
     const client = await this.findOne();
 
     if (client === null) {
-      throw new Error('Client not found!');
+      throw new Error(
+        `Client not found! Are you already run ${chalk.inverse(
+          'lyricstify init',
+        )}?`,
+      );
     }
 
     return client;
