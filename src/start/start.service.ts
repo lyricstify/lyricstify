@@ -51,25 +51,17 @@ export class StartService {
       ),
     });
 
-    keypress$.subscribe(([key]: KeypressEventInterface) => {
-      if (key === 'CTRL_C') {
-        this.terminalKitService.close(terminal);
-      }
-    });
+    const keypressSubscriber = keypress$.subscribe(
+      ([key]: KeypressEventInterface) => {
+        if (key === 'CTRL_C') {
+          this.terminalKitService.close(terminal);
+        }
+      },
+    );
 
-    orchestra$.subscribe({
+    const orchestraSubscriber = orchestra$.subscribe({
       error: (e) => {
-        const message = (() => {
-          if (typeof e === 'string') {
-            return e;
-          }
-
-          if (e instanceof Error) {
-            return e.message;
-          }
-
-          return 'An error occurred while using the start command.';
-        })();
+        const message = this.handleErrorMessage(e);
 
         this.terminalKitService.close(terminal);
         console.error(chalk.redBright(message));
@@ -79,5 +71,19 @@ export class StartService {
         textBox.scrollTo(0, cursor - 1);
       },
     });
+
+    return { keypressSubscriber, orchestraSubscriber };
+  }
+
+  private handleErrorMessage(e: unknown) {
+    if (typeof e === 'string') {
+      return e;
+    }
+
+    if (e instanceof Error) {
+      return e.message;
+    }
+
+    return 'An error occurred while using the start command.';
   }
 }
