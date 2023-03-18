@@ -1,15 +1,16 @@
+import { faker } from '@faker-js/faker';
 import { jest } from '@jest/globals';
 import { HttpService } from '@nestjs/axios';
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AxiosError } from 'axios';
 import { Observable, of } from 'rxjs';
-import { createFakeAxiosResponse } from '../../test/utils/axios.js';
+import { createFakeAxiosResponse } from '../../test/utils/common/create-fake-axios-response.js';
+import { createRandomCurrentlyPlayingResponse } from '../../test/utils/player/create-random-currently-playing-response.js';
+import { ConfigService } from '../config/config.service.js';
 import { TokenService } from '../token/token.service.js';
 import { CurrentlyPlayingDto } from './dto/currently-playing.dto.js';
 import { PlayerService } from './player.service.js';
-
-type Res = SpotifyApi.CurrentlyPlayingResponse;
 
 describe('PlayerService', () => {
   let playerService: PlayerService;
@@ -17,7 +18,17 @@ describe('PlayerService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PlayerService],
+      providers: [
+        PlayerService,
+        {
+          provide: ConfigService,
+          useValue: {
+            retryDelay: 0,
+            retryCount: 0,
+            timeout: 0,
+          },
+        },
+      ],
     })
       .useMocker((token) => {
         if (token === HttpService) {
@@ -26,9 +37,9 @@ describe('PlayerService', () => {
 
         if (token === TokenService) {
           return {
-            findOneOrCreateFromExistingRefreshToken: jest
-              .fn()
-              .mockReturnValue({ value: 'fake token value' }),
+            findOneOrCreateFromExistingRefreshToken: jest.fn().mockReturnValue({
+              value: faker.random.alphaNumeric(132, { casing: 'mixed' }),
+            }),
           };
         }
 
@@ -42,29 +53,24 @@ describe('PlayerService', () => {
 
   describe('currentlyPlaying', () => {
     it('should be able to return currently playing dto if response available', async () => {
-      const track = {
-        is_playing: true as Res['is_playing'],
-        progress_ms: 100 as NonNullable<Res['progress_ms']>,
-        currently_playing_type: 'track' as Res['currently_playing_type'],
-        item: { id: '1' } as NonNullable<Res['item']>,
-      } as const;
-
+      const currentlyPlayingResponse = createRandomCurrentlyPlayingResponse({});
       const time = new Date();
 
       jest.useFakeTimers().setSystemTime(time);
-
       jest
         .spyOn(httpService, 'get')
-        .mockImplementation(() => of(createFakeAxiosResponse({ data: track })));
+        .mockReturnValue(
+          of(createFakeAxiosResponse({ data: currentlyPlayingResponse })),
+        );
 
       expect(await playerService.currentlyPlaying()).toEqual(
         new CurrentlyPlayingDto({
           isActive: true,
-          isPlaying: track.is_playing,
-          progress: track.progress_ms,
+          isPlaying: currentlyPlayingResponse.is_playing,
+          progress: currentlyPlayingResponse.progress_ms,
           timestamp: time.getTime(),
-          trackId: track.item.id,
-          type: track.currently_playing_type,
+          trackId: currentlyPlayingResponse.item.id,
+          type: currentlyPlayingResponse.currently_playing_type,
         }),
       );
     });
@@ -73,10 +79,9 @@ describe('PlayerService', () => {
       const time = new Date();
 
       jest.useFakeTimers().setSystemTime(time);
-
       jest
         .spyOn(httpService, 'get')
-        .mockImplementation(() =>
+        .mockReturnValue(
           of(createFakeAxiosResponse({ statusCode: HttpStatus.NO_CONTENT })),
         );
 
