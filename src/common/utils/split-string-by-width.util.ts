@@ -9,7 +9,7 @@ export const splitStringByWidth = (
     const lastChar = acc.at(-1) ?? '';
     const lastCharWidth = terminalKit.stringWidth(lastChar);
 
-    if (lastCharWidth + charWidth < options.width) {
+    if (lastCharWidth + charWidth <= options.width) {
       const previousChars = acc.slice(0, -1);
 
       return [...previousChars, `${lastChar}${char}`];
