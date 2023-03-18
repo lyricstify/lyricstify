@@ -1,8 +1,9 @@
-import { translate } from '@vitalets/google-translate-api';
 import { from } from 'rxjs';
 import { InitializationPipeFunction } from '../../interfaces/initialization-pipe-function.interface.js';
 
 export const translateSentences = (to: string): InitializationPipeFunction => {
+  const googleTranslateApi = import('@vitalets/google-translate-api');
+
   return (lines) => {
     return from(
       (async () => {
@@ -10,6 +11,7 @@ export const translateSentences = (to: string): InitializationPipeFunction => {
           .map((line) => line.words.split('\n').at(0))
           .join('\n');
 
+        const translate = (await googleTranslateApi).translate;
         const { text } = await translate(lyrics, {
           to,
         });
