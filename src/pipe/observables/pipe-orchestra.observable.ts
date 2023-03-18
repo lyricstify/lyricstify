@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { combineLatest, concatMap, EMPTY, Observable, of } from 'rxjs';
+import { map } from 'rxjs';
 import { ObservableRunner } from '../../common/interfaces/observable-runner.interface.js';
 import { GraduallyUpdateProgressObservable } from '../../player/observables/gradually-update-progress.observable.js';
 import { PollCurrentlyPlayingObservable } from '../../player/observables/poll-currently-playing.observable.js';
@@ -28,28 +28,10 @@ export class PipeOrchestraObservable implements ObservableRunner {
       pollCurrentlyPlaying$,
     });
 
-    return combineLatest([
-      pollCurrentlyPlaying$,
-      graduallyUpdateProgress$,
-    ]).pipe(concatMap(this.skipEmitsToObserversIfUnchanged$));
+    return graduallyUpdateProgress$.pipe(map(this.convertToContentState));
   }
 
-  private skipEmitsToObserversIfUnchanged$([
-    currentlyPlayingState1,
-    currentlyPlayingState2,
-  ]: [CurrentlyPlayingState, CurrentlyPlayingState]): Observable<ContentState> {
-    if (
-      currentlyPlayingState1.activeLyricIndex ===
-      currentlyPlayingState2.activeLyricIndex
-    ) {
-      return EMPTY;
-    }
-
-    const currentlyPlayingState =
-      currentlyPlayingState1.timestamp > currentlyPlayingState2.timestamp
-        ? currentlyPlayingState1
-        : currentlyPlayingState2;
-
+  private convertToContentState(currentlyPlayingState: CurrentlyPlayingState) {
     const content = (() => {
       if (currentlyPlayingState.activeLyricIndex === null) {
         return '';
@@ -62,6 +44,6 @@ export class PipeOrchestraObservable implements ObservableRunner {
       return activeLyrics?.words || '';
     })();
 
-    return of(new ContentState({ content }));
+    return new ContentState({ content });
   }
 }
