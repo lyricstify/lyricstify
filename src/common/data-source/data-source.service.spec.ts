@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
 import { rm } from 'fs/promises';
 import { resolve } from 'path';
@@ -5,7 +6,7 @@ import { DataSourceRepository } from './data-source.repository.js';
 import { DataSourceService } from './data-source.service.js';
 
 describe('DataSourceService', () => {
-  const configDir = resolve('.tests');
+  const configDir = resolve('.tests/data-source.service.spec');
   let dataSourceService: DataSourceService;
 
   beforeEach(async () => {
@@ -40,7 +41,7 @@ describe('DataSourceService', () => {
 
     it('should be able to save data', async () => {
       const dataSourceRepository = dataSourceService.access('test.json');
-      const data = { id: 10 };
+      const data = { id: faker.random.numeric() };
 
       expect(await dataSourceRepository.replace(data)).toEqual(data);
       expect(await dataSourceRepository.find()).toEqual(data);
