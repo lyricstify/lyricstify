@@ -1,13 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  combineLatest,
-  concatMap,
-  EMPTY,
-  map,
-  Observable,
-  of,
-  scan,
-} from 'rxjs';
+import { combineLatest, map, scan } from 'rxjs';
 import terminalKit from 'terminal-kit';
 import { ObservableRunner } from '../../common/interfaces/observable-runner.interface.js';
 import {
@@ -23,7 +15,6 @@ import { AdjustmentLyricsDto } from '../../transformation/dto/adjustment-lyrics.
 import { AdjustmentPipeFunction } from '../../transformation/interfaces/adjustment-pipe-function.interface.js';
 import { InitializationPipeFunction } from '../../transformation/interfaces/initialization-pipe-function.interface.js';
 import { UpdateProgressPipeFunction } from '../../transformation/interfaces/update-progress-pipe-function.interface.js';
-import { PlayerTerminalState } from '../states/player-terminal.state.js';
 import { TerminalContentState } from '../states/terminal-content.state.js';
 
 interface RunOptions {
@@ -61,14 +52,9 @@ export class StartOrchestraObservable implements ObservableRunner {
     });
     const terminalResizeEvent$ = this.terminalResizeEvent.run({ terminal });
 
-    return combineLatest([
-      pollCurrentlyPlaying$,
-      graduallyUpdateProgress$,
-      terminalResizeEvent$,
-    ]).pipe(
-      concatMap(this.skipEmitsToObserversIfUnchanged$),
+    return combineLatest([graduallyUpdateProgress$, terminalResizeEvent$]).pipe(
       scan(
-        this.updateStateAndAdjustLyricsIfChanged$(lyricsAdjustmentPipes),
+        this.updateAdjustmentLyricsStateIfChanged$(lyricsAdjustmentPipes),
         new AdjustmentLyricsDto({}),
       ),
       map(lyricsUpdateProgressPipes),
@@ -76,37 +62,15 @@ export class StartOrchestraObservable implements ObservableRunner {
     );
   }
 
-  private skipEmitsToObserversIfUnchanged$([
-    currentlyPlayingState1,
-    currentlyPlayingState2,
-    terminalSizeState,
-  ]: [
-    CurrentlyPlayingState,
-    CurrentlyPlayingState,
-    TerminalSizeState,
-  ]): Observable<PlayerTerminalState> {
-    if (
-      currentlyPlayingState1.activeLyricIndex ===
-        currentlyPlayingState2.activeLyricIndex &&
-      terminalSizeState.isResized === false
-    ) {
-      return EMPTY;
-    }
-
-    const currentlyPlayingState =
-      currentlyPlayingState1.timestamp > currentlyPlayingState2.timestamp
-        ? currentlyPlayingState1
-        : currentlyPlayingState2;
-
-    return of({ currentlyPlayingState, terminalSizeState });
-  }
-
-  private updateStateAndAdjustLyricsIfChanged$(
+  private updateAdjustmentLyricsStateIfChanged$(
     pipes: PipelineFunction<AdjustmentLyricsDto>,
   ) {
     return (
       acc: AdjustmentLyricsDto,
-      { currentlyPlayingState, terminalSizeState }: PlayerTerminalState,
+      [currentlyPlayingState, terminalSizeState]: [
+        CurrentlyPlayingState,
+        TerminalSizeState,
+      ],
     ) => {
       if (
         currentlyPlayingState.isLyricModified === true ||
