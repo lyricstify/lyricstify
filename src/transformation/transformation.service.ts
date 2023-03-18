@@ -22,7 +22,7 @@ export class TransformationService {
     return ([] as InitializationPipeFunction[])
       .concat(
         createInitializationPipeDto.romanizeJapaneseSentences === true
-          ? romanizeJapaneseSentences
+          ? romanizeJapaneseSentences()
           : [],
       )
       .concat(
