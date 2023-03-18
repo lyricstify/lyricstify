@@ -28,25 +28,28 @@ export class PipeService {
       ),
     });
 
-    orchestra$.subscribe({
+    const orchestraSubscriber = orchestra$.subscribe({
       error: (e) => {
-        const message = (() => {
-          if (typeof e === 'string') {
-            return e;
-          }
-
-          if (e instanceof Error) {
-            return e.message;
-          }
-
-          return 'An error occurred while using the start command.';
-        })();
-
+        const message = this.handleErrorMessage(e);
         console.error(chalk.redBright(message));
       },
       next: ({ content }) => {
         console.info(content);
       },
     });
+
+    return { orchestraSubscriber };
+  }
+
+  private handleErrorMessage(e: unknown) {
+    if (typeof e === 'string') {
+      return e;
+    }
+
+    if (e instanceof Error) {
+      return e.message;
+    }
+
+    return 'An error occurred while using the pipe command.';
   }
 }
