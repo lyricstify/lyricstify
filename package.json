@@ -15,10 +15,11 @@
     "start:debug": "nest start --debug --watch --entryFile cli",
     "start:repl": "nest start --entryFile repl",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest ./src",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "test:watch": "jest --watch",
     "test:cov": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
     "test:debug": "node --experimental-vm-modules --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:unit": "node --experimental-vm-modules node_modules/.bin/jest ./src",
     "test:e2e": "node --experimental-vm-modules node_modules/.bin/jest ./test"
   },
   "dependencies": {
