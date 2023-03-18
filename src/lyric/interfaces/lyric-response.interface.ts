@@ -7,9 +7,4 @@ export interface LyricResponseInterface {
   providerLyricsId: string;
   providerDisplayName: string;
   language: string;
-  syncLyricsUri: string;
-  isDenseTypeface: boolean;
-  alternatives: unknown[];
-  isRtlLanguage: boolean;
-  fullscreenAction: string;
 }
