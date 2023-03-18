@@ -1,11 +1,12 @@
+import { faker } from '@faker-js/faker';
 import { LineResponseInterface } from '../../lyric/interfaces/line-response.interface.js';
 import { CurrentlyPlayingState } from './currently-playing.state.js';
 
 describe('CurrentlyPlayingState', () => {
   const lyrics: LineResponseInterface[] = [
-    { startTimeMs: 100, words: 'Hello World at 100 ms', endTimeMs: 0 },
-    { startTimeMs: 200, words: 'Hello World at 200 ms', endTimeMs: 0 },
-    { startTimeMs: 300, words: 'Hello World at 300 ms', endTimeMs: 0 },
+    { startTimeMs: 100, words: faker.lorem.sentences(), endTimeMs: 0 },
+    { startTimeMs: 200, words: faker.lorem.sentences(), endTimeMs: 0 },
+    { startTimeMs: 300, words: faker.lorem.sentences(), endTimeMs: 0 },
   ];
 
   describe('currentLyricIndexByProgressTime', () => {
@@ -59,12 +60,12 @@ describe('CurrentlyPlayingState', () => {
     it('should be able to get next lyric if available', () => {
       const state = new CurrentlyPlayingState({
         lyrics,
-        activeLyricIndex: 2,
+        activeLyricIndex: 1,
       });
 
       expect(state.nextLyric()).toEqual({
-        index: 3,
-        value: lyrics.at(3),
+        index: 2,
+        value: lyrics.at(2),
       });
     });
   });
