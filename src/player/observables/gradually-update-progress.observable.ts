@@ -8,6 +8,7 @@ import { sharedPairwise } from '../../common/rxjs/operators/shared-pairwise.oper
 import { ObservableRunner } from '../../common/interfaces/observable-runner.interface.js';
 import { sharedScan } from '../../common/rxjs/operators/shared-scan.operator.js';
 import { CurrentlyPlayingState } from '../states/currently-playing.state.js';
+import { ConfigService } from '../../config/config.service.js';
 
 interface RunOptions {
   pollCurrentlyPlaying$: Observable<CurrentlyPlayingState>;
@@ -15,18 +16,16 @@ interface RunOptions {
 
 @Injectable()
 export class GraduallyUpdateProgressObservable implements ObservableRunner {
+  constructor(private readonly configService: ConfigService) {}
+
   run({ pollCurrentlyPlaying$ }: RunOptions) {
     return of({}).pipe(
       withLatestFrom(pollCurrentlyPlaying$),
       map(this.removeUnusedInitialValue),
-      sharedScan(this.updateTrackState, new CurrentlyPlayingState({})),
+      sharedScan(this.updateActiveLyricsState, new CurrentlyPlayingState({})),
+      repeatWith(this.repeatAfterDelayBetweenCurrentAndNextLyrics()),
       sharedPairwise(),
       concatMap(this.skipEmitsToObserversIfUnchanged$),
-      repeatWith(
-        this.repeatAfterDelayBetweenCurrentAndNextLyrics({
-          defaultDelay: 1000,
-        }),
-      ),
     );
   }
 
@@ -34,7 +33,7 @@ export class GraduallyUpdateProgressObservable implements ObservableRunner {
     return value;
   }
 
-  private updateTrackState(
+  private updateActiveLyricsState(
     acc: CurrentlyPlayingState,
     val: CurrentlyPlayingState,
   ) {
@@ -48,7 +47,36 @@ export class GraduallyUpdateProgressObservable implements ObservableRunner {
       });
     }
 
-    return val;
+    const progress = val.progress + new Date().getTime() - val.timestamp;
+    const activeLyricIndex = val.currentLyricIndexByProgressTime(progress);
+
+    return new CurrentlyPlayingState({
+      ...val,
+      activeLyricIndex,
+      progress,
+    });
+  }
+
+  private repeatAfterDelayBetweenCurrentAndNextLyrics() {
+    return (val: CurrentlyPlayingState): RepeatConfig => {
+      const nextLyric = val.nextLyric();
+
+      if (
+        val.isActive === false ||
+        val.isPlaying === false ||
+        nextLyric === null
+      ) {
+        return { delay: this.configService.retryDelay };
+      }
+
+      const intervalWithNextLyric = nextLyric.value.startTimeMs - val.progress;
+      const delay =
+        intervalWithNextLyric <= 0
+          ? this.configService.retryDelay
+          : intervalWithNextLyric;
+
+      return { delay };
+    };
   }
 
   private skipEmitsToObserversIfUnchanged$([prev, current]: [
@@ -58,36 +86,11 @@ export class GraduallyUpdateProgressObservable implements ObservableRunner {
     if (
       (prev?.isActive === false && current.isActive === false) ||
       (prev?.isPlaying === false && current.isPlaying === false) ||
-      (prev?.activeLyricIndex === null && current.activeLyricIndex === null) ||
-      (prev?.progress === 0 && current.progress === 0)
+      prev?.activeLyricIndex === current.activeLyricIndex
     ) {
       return EMPTY;
     }
 
     return of(current);
-  }
-
-  private repeatAfterDelayBetweenCurrentAndNextLyrics({
-    defaultDelay,
-  }: {
-    defaultDelay: number;
-  }) {
-    return (val: CurrentlyPlayingState): RepeatConfig => {
-      const nextLyric = val.nextLyric();
-
-      if (
-        val.isActive === false ||
-        val.isPlaying === false ||
-        nextLyric === null
-      ) {
-        return { delay: defaultDelay };
-      }
-
-      const intervalWithNextLyric = nextLyric.value.startTimeMs - val.progress;
-      const delay =
-        intervalWithNextLyric <= 0 ? defaultDelay : intervalWithNextLyric;
-
-      return { delay: delay };
-    };
   }
 }
