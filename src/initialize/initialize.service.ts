@@ -3,7 +3,6 @@ import chalk from 'chalk';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service.js';
 import { ClientService } from '../client/client.service.js';
 import { CreateClientDto } from '../client/dto/create-client-dto.js';
-import { bootstrap } from '../http.js';
 import { InitializeOptionsDto } from './dto/initialize-options.dto.js';
 import { RequestAuthorizationDto } from './dto/request-authorization.dto.js';
 
@@ -21,9 +20,9 @@ export class InitializeService {
     initializeOptionsDto: InitializeOptionsDto,
   ): Promise<{ message: string; status: 'ERROR' | 'SUCCESS' }> {
     try {
-      const code = await bootstrap(
-        Number(initializeOptionsDto.redirectUriPort),
-      );
+      const code = await (
+        await import('../http.js')
+      ).bootstrap(Number(initializeOptionsDto.redirectUriPort));
 
       const createClientDto = new CreateClientDto({
         id: initializeOptionsDto.id,
