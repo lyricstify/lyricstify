@@ -23,7 +23,7 @@ export class GraduallyUpdateProgressObservable implements ObservableRunner {
       withLatestFrom(pollCurrentlyPlaying$),
       map(this.removeUnusedInitialValue),
       sharedScan(this.updateActiveLyricsState, new CurrentlyPlayingState({})),
-      repeatWith(this.repeatAfterDelayBetweenCurrentAndNextLyrics()),
+      repeatWith(this.repeatAfterDelayBetweenCurrentAndNextLyrics.bind(this)),
       sharedPairwise(),
       concatMap(this.skipEmitsToObserversIfUnchanged$),
     );
@@ -57,26 +57,26 @@ export class GraduallyUpdateProgressObservable implements ObservableRunner {
     });
   }
 
-  private repeatAfterDelayBetweenCurrentAndNextLyrics() {
-    return (val: CurrentlyPlayingState): RepeatConfig => {
-      const nextLyric = val.nextLyric();
+  private repeatAfterDelayBetweenCurrentAndNextLyrics(
+    val: CurrentlyPlayingState,
+  ): RepeatConfig {
+    const nextLyric = val.nextLyric();
 
-      if (
-        val.isActive === false ||
-        val.isPlaying === false ||
-        nextLyric === null
-      ) {
-        return { delay: this.configService.retryDelay };
-      }
+    if (
+      val.isActive === false ||
+      val.isPlaying === false ||
+      nextLyric === null
+    ) {
+      return { delay: this.configService.retryDelay };
+    }
 
-      const intervalWithNextLyric = nextLyric.value.startTimeMs - val.progress;
-      const delay =
-        intervalWithNextLyric <= 0
-          ? this.configService.retryDelay
-          : intervalWithNextLyric;
+    const intervalWithNextLyric = nextLyric.value.startTimeMs - val.progress;
+    const delay =
+      intervalWithNextLyric <= 0
+        ? this.configService.retryDelay
+        : intervalWithNextLyric;
 
-      return { delay };
-    };
+    return { delay };
   }
 
   private skipEmitsToObserversIfUnchanged$([prev, current]: [

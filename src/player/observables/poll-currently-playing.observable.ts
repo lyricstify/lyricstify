@@ -43,7 +43,7 @@ export class PollCurrentlyPlayingObservable implements ObservableRunner {
       concatMap(() => from(this.playerService.currentlyPlaying())),
       sharedPairwise(),
       concatMap(
-        this.generateCurrentlyPlayingStateOrSkipEmitsToObserversIfUnchanged$(
+        this.generateCurrentlyPlayingStateOrSkipEmitsIfUnchanged$(
           lyricsInitializationPipes,
         ),
       ),
@@ -53,7 +53,7 @@ export class PollCurrentlyPlayingObservable implements ObservableRunner {
     );
   }
 
-  private generateCurrentlyPlayingStateOrSkipEmitsToObserversIfUnchanged$(
+  private generateCurrentlyPlayingStateOrSkipEmitsIfUnchanged$(
     pipes: MonoTypeOperatorFunction<LineResponseInterface[]>[],
   ) {
     return ([prev, current]: [
