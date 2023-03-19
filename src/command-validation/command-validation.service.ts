@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import chalk from 'chalk';
+import { SyncType } from '../player/types/sync-type.type.js';
 import { HorizontalAlignChoicesType } from '../transformation/types/horizontal-align-choices.type.js';
 
 @Injectable()
@@ -57,7 +58,7 @@ export class CommandValidationService {
   validateHorizontalAlignOptionOrFail(val: string) {
     const choices = this.horizontalAlignChoices();
 
-    if (this.isPartOfHorizontalAlignChoices(val) === false) {
+    if (this.isPartOf(val, choices) === false) {
       throw new Error(
         chalk.redBright(
           `<horizontal-align> should be one of the following options: ${choices.join(
@@ -72,15 +73,29 @@ export class CommandValidationService {
     return ['center', 'left', 'right'];
   }
 
+  validateSyncTypeOrFail(val: string) {
+    const choices = this.syncTypeChoices();
+
+    if (this.isPartOf(val, choices) === false) {
+      throw new Error(
+        chalk.redBright(
+          `<sync-type> should be one of the following options: ${choices.join(
+            ', ',
+          )}.`,
+        ),
+      );
+    }
+  }
+
+  syncTypeChoices(): SyncType[] {
+    return ['none', 'balance', 'autoplay'];
+  }
+
   private isPositiveNumber(val: number) {
     return Number.isInteger(val) === true && val > 0;
   }
 
-  private isPartOfHorizontalAlignChoices(
-    val: string,
-  ): val is HorizontalAlignChoicesType {
-    return this.horizontalAlignChoices().includes(
-      val as HorizontalAlignChoicesType,
-    );
+  private isPartOf<T>(val: unknown, collection: T[]): val is T {
+    return collection.includes(val as T);
   }
 }

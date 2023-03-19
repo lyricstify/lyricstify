@@ -80,7 +80,7 @@ describe('PollCurrentlyPlayingObservable', () => {
       );
 
       const pollCurrentlyPlaying$ = pollCurrentlyPlayingObservable
-        .run({ delay: 0, initializationPipes: [] })
+        .run({ delay: 0, initializationPipes: [], syncType: 'none' })
         .pipe(take(4), skip(1)); // take the first 4 values, and skip the default value
       const observerSpy = subscribeSpyTo(pollCurrentlyPlaying$);
       await observerSpy.onComplete();
@@ -106,7 +106,7 @@ describe('PollCurrentlyPlayingObservable', () => {
       );
 
       const pollCurrentlyPlaying$ = pollCurrentlyPlayingObservable
-        .run({ delay: 0, initializationPipes: [] })
+        .run({ delay: 0, initializationPipes: [], syncType: 'none' })
         .pipe(take(4), skip(1)); // take the first 4 values, and skip the default value
       const observerSpy = subscribeSpyTo(pollCurrentlyPlaying$);
       await observerSpy.onComplete();
@@ -128,7 +128,7 @@ describe('PollCurrentlyPlayingObservable', () => {
       );
 
       const pollCurrentlyPlaying$ = pollCurrentlyPlayingObservable
-        .run({ delay: 0, initializationPipes: [] })
+        .run({ delay: 0, initializationPipes: [], syncType: 'none' })
         .pipe(take(3));
 
       const observerSpy = subscribeSpyTo(pollCurrentlyPlaying$);
@@ -151,7 +151,7 @@ describe('PollCurrentlyPlayingObservable', () => {
         );
 
       const pollCurrentlyPlaying$ = pollCurrentlyPlayingObservable
-        .run({ delay: 0, initializationPipes: [] })
+        .run({ delay: 0, initializationPipes: [], syncType: 'none' })
         .pipe(take(2));
       const observerSpy = subscribeSpyTo(pollCurrentlyPlaying$);
       await observerSpy.onComplete();
@@ -167,7 +167,7 @@ describe('PollCurrentlyPlayingObservable', () => {
         );
 
       const pollCurrentlyPlaying$ = pollCurrentlyPlayingObservable
-        .run({ delay: 0, initializationPipes: [] })
+        .run({ delay: 0, initializationPipes: [], syncType: 'none' })
         .pipe(take(2));
       const observerSpy = subscribeSpyTo(pollCurrentlyPlaying$);
       await observerSpy.onComplete();

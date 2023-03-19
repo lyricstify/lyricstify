@@ -16,9 +16,11 @@ export class PipeService {
     delay,
     romaji: romanizeJapaneseSentences,
     translateTo: translateSentences,
+    syncType,
   }: PipeOptionsDto) {
     const orchestra$ = this.pipeOrchestraObservable.run({
       delay,
+      syncType,
       initializationPipes: this.transformationService.initializationPipesFrom(
         new CreateInitializationPipesDto({
           romanizeJapaneseSentences,

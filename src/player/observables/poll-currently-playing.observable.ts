@@ -21,10 +21,12 @@ import { CurrentlyPlayingState } from '../states/currently-playing.state.js';
 import { sharedScan } from '../../common/rxjs/operators/shared-scan.operator.js';
 import { InitializationPipeFunction } from '../../transformation/interfaces/initialization-pipe-function.interface.js';
 import { LineResponseInterface } from '../../lyric/interfaces/line-response.interface.js';
+import { SyncType } from '../types/sync-type.type.js';
 
 interface RunOptions {
   delay: number;
   initializationPipes: InitializationPipeFunction[];
+  syncType: SyncType;
 }
 
 @Injectable()
@@ -34,7 +36,7 @@ export class PollCurrentlyPlayingObservable implements ObservableRunner {
     private readonly lyricService: LyricService,
   ) {}
 
-  run({ delay, initializationPipes }: RunOptions) {
+  run({ delay, initializationPipes, syncType }: RunOptions) {
     const lyricsInitializationPipes = initializationPipes.map((pipe) =>
       mergeMap(pipe),
     );
@@ -47,7 +49,10 @@ export class PollCurrentlyPlayingObservable implements ObservableRunner {
           lyricsInitializationPipes,
         ),
       ),
-      sharedScan(this.updateActiveLyricsState, new CurrentlyPlayingState({})),
+      sharedScan(
+        this.updateActiveLyricsState(syncType),
+        new CurrentlyPlayingState({}),
+      ),
       repeat({ delay }),
       share(this.createSharedSubjectConfiguration()),
     );
@@ -112,29 +117,39 @@ export class PollCurrentlyPlayingObservable implements ObservableRunner {
     };
   }
 
-  private updateActiveLyricsState(
-    acc: CurrentlyPlayingState,
-    val: CurrentlyPlayingState,
-  ) {
-    const timestamp = new Date().getTime();
-    const progress = val.progress + timestamp - val.timestamp;
+  private updateActiveLyricsState(syncType: SyncType) {
+    const timeReduction = (() => {
+      switch (syncType) {
+        case 'autoplay':
+          return 2500;
+        case 'balance':
+          return 1250;
+        default:
+          return 0;
+      }
+    })();
 
-    if (val.isLyricModified === false) {
+    return (acc: CurrentlyPlayingState, val: CurrentlyPlayingState) => {
+      const timestamp = new Date().getTime();
+      const progress = val.progress + timestamp - val.timestamp - timeReduction;
+
+      if (val.isLyricModified === false) {
+        return new CurrentlyPlayingState({
+          ...val,
+          lyrics: acc.lyrics,
+          activeLyricIndex: acc.currentLyricIndexByProgressTime(progress),
+          progress,
+          timestamp,
+        });
+      }
+
       return new CurrentlyPlayingState({
         ...val,
-        lyrics: acc.lyrics,
-        activeLyricIndex: acc.currentLyricIndexByProgressTime(progress),
+        activeLyricIndex: val.currentLyricIndexByProgressTime(progress),
         progress,
         timestamp,
       });
-    }
-
-    return new CurrentlyPlayingState({
-      ...val,
-      activeLyricIndex: val.currentLyricIndexByProgressTime(progress),
-      progress,
-      timestamp,
-    });
+    };
   }
 
   private createSharedSubjectConfiguration(): ShareConfig<CurrentlyPlayingState> {

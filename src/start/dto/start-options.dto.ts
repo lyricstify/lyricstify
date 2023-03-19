@@ -13,8 +13,9 @@ export class StartOptionsDto extends PipeOptionsDto {
     highlightMarkup,
     delay,
     horizontalAlign,
+    syncType,
   }: StartOptionsDto) {
-    super({ romaji, translateTo, delay });
+    super({ romaji, translateTo, delay, syncType });
     this.verticalSpacing = verticalSpacing;
     this.highlightMarkup = highlightMarkup;
     this.horizontalAlign = horizontalAlign;

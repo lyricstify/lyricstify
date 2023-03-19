@@ -45,6 +45,7 @@ describe('PipeService', () => {
         delay: 0,
         romaji: false,
         translateTo: false,
+        syncType: 'none',
       });
 
       expect(consoleSpy).toHaveBeenCalledWith(contentState.content);
@@ -69,6 +70,7 @@ describe('PipeService', () => {
         delay: 0,
         romaji: false,
         translateTo: false,
+        syncType: 'none',
       });
 
       expect(consoleSpy).toHaveBeenCalledWith(

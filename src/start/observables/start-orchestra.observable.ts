@@ -9,6 +9,7 @@ import {
 import { GraduallyUpdateProgressObservable } from '../../player/observables/gradually-update-progress.observable.js';
 import { PollCurrentlyPlayingObservable } from '../../player/observables/poll-currently-playing.observable.js';
 import { CurrentlyPlayingState } from '../../player/states/currently-playing.state.js';
+import { SyncType } from '../../player/types/sync-type.type.js';
 import { ResizeEventObservable } from '../../terminal-kit/observables/resize-event.observable.js';
 import { TerminalSizeState } from '../../terminal-kit/states/terminal-size.state.js';
 import { AdjustmentLyricsDto } from '../../transformation/dto/adjustment-lyrics.dto.js';
@@ -23,6 +24,7 @@ interface RunOptions {
   initializationPipes: InitializationPipeFunction[];
   adjustmentPipes: AdjustmentPipeFunction[];
   updateProgressPipes: UpdateProgressPipeFunction[];
+  syncType: SyncType;
 }
 
 @Injectable()
@@ -39,6 +41,7 @@ export class StartOrchestraObservable implements ObservableRunner {
     initializationPipes,
     adjustmentPipes,
     updateProgressPipes,
+    syncType,
   }: RunOptions) {
     const lyricsAdjustmentPipes = pipeline(...adjustmentPipes);
     const lyricsUpdateProgressPipes = pipeline(...updateProgressPipes);
@@ -46,6 +49,7 @@ export class StartOrchestraObservable implements ObservableRunner {
     const pollCurrentlyPlaying$ = this.pollCurrentlyPlaying.run({
       delay,
       initializationPipes,
+      syncType,
     });
     const graduallyUpdateProgress$ = this.graduallyUpdateProgress.run({
       pollCurrentlyPlaying$,

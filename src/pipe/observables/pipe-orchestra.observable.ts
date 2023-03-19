@@ -4,12 +4,14 @@ import { ObservableRunner } from '../../common/interfaces/observable-runner.inte
 import { GraduallyUpdateProgressObservable } from '../../player/observables/gradually-update-progress.observable.js';
 import { PollCurrentlyPlayingObservable } from '../../player/observables/poll-currently-playing.observable.js';
 import { CurrentlyPlayingState } from '../../player/states/currently-playing.state.js';
+import { SyncType } from '../../player/types/sync-type.type.js';
 import { InitializationPipeFunction } from '../../transformation/interfaces/initialization-pipe-function.interface.js';
 import { ContentState } from '../states/content.state.js';
 
 interface RunOptions {
   delay: number;
   initializationPipes: InitializationPipeFunction[];
+  syncType: SyncType;
 }
 
 @Injectable()
@@ -19,10 +21,11 @@ export class PipeOrchestraObservable implements ObservableRunner {
     private readonly graduallyUpdateProgress: GraduallyUpdateProgressObservable,
   ) {}
 
-  run({ delay, initializationPipes }: RunOptions) {
+  run({ delay, initializationPipes, syncType }: RunOptions) {
     const pollCurrentlyPlaying$ = this.pollCurrentlyPlaying.run({
       delay,
       initializationPipes,
+      syncType,
     });
     const graduallyUpdateProgress$ = this.graduallyUpdateProgress.run({
       pollCurrentlyPlaying$,

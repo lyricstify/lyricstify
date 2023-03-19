@@ -55,6 +55,7 @@ describe('PipeOrchestraObservable', () => {
       const pipeOrchestra$ = pipeOrchestraObservable.run({
         delay: 0,
         initializationPipes: [],
+        syncType: 'none',
       });
       const observerSpy = subscribeSpyTo(pipeOrchestra$);
       await observerSpy.onComplete();
@@ -79,6 +80,7 @@ describe('PipeOrchestraObservable', () => {
       const pipeOrchestra$ = pipeOrchestraObservable.run({
         delay: 0,
         initializationPipes: [],
+        syncType: 'none',
       });
       const observerSpy = subscribeSpyTo(pipeOrchestra$);
       await observerSpy.onComplete();

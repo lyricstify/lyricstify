@@ -1,4 +1,9 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import {
+  Command,
+  CommandRunner,
+  Option,
+  OptionChoiceFor,
+} from 'nest-commander';
 import { CommandValidationService } from '../command-validation/command-validation.service.js';
 import { PipeOptionsDto } from './dto/pipe-options.dto.js';
 import { PipeOptionsInterface } from './interfaces/pipe-options.interface.js';
@@ -53,5 +58,27 @@ export class PipeCommand extends CommandRunner {
   })
   parseTranslateTo(val: string) {
     return val;
+  }
+
+  @Option({
+    flags: '--sync-type <sync-type>',
+    defaultValue: 'none',
+    description:
+      'Controls the synchronization type for displaying lyrics.\n' +
+      '• "none" means not modifying synchronizations that are already given from Spotify, this may cause lyrics not perfectly synced in your next songs that played automatically.\n' +
+      '• "autoplay" can be used if your songs are played automatically, but your lyrics also may not sync perfectly if you control tracks manually (e.g switching between songs, seeking, or pausing and resuming manually)\n' +
+      '• "balance" may be used if you let your songs play automatically but sometimes you also control tracks manually',
+    choices: true,
+    name: 'sync type choices',
+  })
+  parseSyncType(val: string) {
+    this.commandValidationService.validateSyncTypeOrFail(val);
+
+    return val;
+  }
+
+  @OptionChoiceFor({ name: 'sync type choices' })
+  chosenForSyncTypeChoices() {
+    return this.commandValidationService.syncTypeChoices();
   }
 }

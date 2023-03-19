@@ -75,6 +75,7 @@ describe('StartOrchestraObservable', () => {
           updateProgressPipes: [],
           delay: 0,
           terminal: terminalKit.terminal,
+          syncType: 'none',
         })
         .pipe(take(1));
 

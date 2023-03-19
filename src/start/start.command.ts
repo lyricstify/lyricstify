@@ -79,7 +79,7 @@ export class StartCommand extends CommandRunner {
     flags: '--horizontal-align <horizontal-align>',
     defaultValue: 'center',
     description:
-      'Characters for indentation of vertically aligned center lyrics.',
+      'Specify how the lyrics should be horizontally aligned on the screen.',
     choices: true,
     name: 'horizontal align choices',
   })
@@ -102,5 +102,27 @@ export class StartCommand extends CommandRunner {
   })
   parseHighlightMarkup(val: string) {
     return val;
+  }
+
+  @Option({
+    flags: '--sync-type <sync-type>',
+    defaultValue: 'none',
+    description:
+      'Controls the synchronization type for displaying lyrics.\n' +
+      '• "none" means not modifying synchronizations that are already given from Spotify, this may cause lyrics not perfectly synced in your next songs that played automatically.\n' +
+      '• "autoplay" can be used if your songs are played automatically, but your lyrics also may not sync perfectly if you control tracks manually (e.g switching between songs, seeking, or pausing and resuming manually)\n' +
+      '• "balance" may be used if you let your songs play automatically but sometimes you also control tracks manually',
+    choices: true,
+    name: 'sync type choices',
+  })
+  parseSyncType(val: string) {
+    this.commandValidationService.validateSyncTypeOrFail(val);
+
+    return val;
+  }
+
+  @OptionChoiceFor({ name: 'sync type choices' })
+  chosenForSyncTypeChoices() {
+    return this.commandValidationService.syncTypeChoices();
   }
 }

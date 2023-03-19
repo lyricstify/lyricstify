@@ -26,12 +26,14 @@ export class StartService {
     translateTo: translateSentences,
     highlightMarkup,
     horizontalAlign,
+    syncType,
   }: StartOptionsDto) {
     const { terminal, textBox } = this.terminalKitService.spawn();
     const keypress$ = this.terminalKeypressEvent.run({ terminal });
     const orchestra$ = this.startOrchestraObservable.run({
       terminal,
       delay,
+      syncType,
       initializationPipes: this.transformationService.initializationPipesFrom(
         new CreateInitializationPipesDto({
           romanizeJapaneseSentences,
