@@ -1,0 +1,15 @@
+src/
+test/
+tsconfig.json
+tsconfig.build.json
+nest-cli.json
+
+.releaserc.json
+.prettierrc
+.eslintrc.json
+.editorconfig
+
+.github
+.husky
+
+*.tsbuildinfo

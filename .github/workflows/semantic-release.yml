@@ -1,0 +1,35 @@
+name: Run Auto Release Package using Semantic Versioning
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [Run Code Tests]
+    types:
+      - completed
+
+jobs:
+  release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+          cache: npm
+
+      - name: Clean install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+
+      - name: Release
+        run: npx semantic-release --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
