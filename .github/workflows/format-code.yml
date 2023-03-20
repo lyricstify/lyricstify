@@ -1,8 +1,16 @@
-name: Run Code Formatting using Prettier and ESLint
+name: Run Code Formats
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
+    branches:
+      - '*.x'
+      - main
+      - next
+      - next-major
+      - beta
+      - alpha
+      - dev
     paths:
       - src/**/*.ts
       - test/**/*.ts
@@ -26,13 +34,5 @@ jobs:
       - name: Clean install dependencies
         run: npm ci
 
-      - name: Run Prettier
-        run: npm run format
-
       - name: Run ESLint
-        run: npm run lint
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: 'style: automatically format code styles'
+        run: npm run lint:ci
