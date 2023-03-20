@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - /src/**/*.ts
-      - /test/**/*.ts
+      - src/**/*.ts
+      - test/**/*.ts
 
 jobs:
   format-code:
