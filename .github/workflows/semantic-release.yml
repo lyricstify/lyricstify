@@ -35,6 +35,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           max_attempts: 3
+          timeout_seconds: 600
           retry_on: error
-          retry_wait_seconds: 18000
+          retry_wait_seconds: 300
           command: npx semantic-release
