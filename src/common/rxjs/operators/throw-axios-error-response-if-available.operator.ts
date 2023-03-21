@@ -1,14 +1,7 @@
-import { AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import chalk from 'chalk';
 import { catchError, MonoTypeOperatorFunction, pipe, throwError } from 'rxjs';
 import terminalLink from 'terminal-link';
-
-const isAxiosError = (error: unknown): error is AxiosError =>
-  error !== undefined &&
-  error !== null &&
-  typeof error === 'object' &&
-  'name' in error &&
-  error.name === 'AxiosError';
 
 export const throwAxiosErrorResponseIfAvailable = <T>(
   from: string,
