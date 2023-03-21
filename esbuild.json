@@ -1,0 +1,17 @@
+{
+  "entry": "./dist/cli.js",
+  "outfile": "./bundle/bundle.js",
+  "format": "cjs",
+  "bundle": true,
+  "platform": "node",
+  "external": [
+    "@nestjs/websockets/socket-module",
+    "@nestjs/microservices/microservices-module",
+    "@nestjs/microservices",
+    "class-validator",
+    "class-transformer",
+    "cache-manager",
+    "kuromoji",
+    "terminal-kit"
+  ]
+}

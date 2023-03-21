@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+/bundle
+/executable
 
 # Logs
 logs

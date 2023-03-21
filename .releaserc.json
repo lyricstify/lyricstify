@@ -27,7 +27,25 @@
       }
     ],
     "@semantic-release/npm",
-    "@semantic-release/github",
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "executable/@lyricstify/lyricstify-linux",
+            "label": "node18-linux-x64"
+          },
+          {
+            "path": "executable/@lyricstify/lyricstify-macos",
+            "label": "node18-macos-x64"
+          },
+          {
+            "path": "executable/@lyricstify/lyricstify-win.exe",
+            "label": "node18-win-x64"
+          }
+        ]
+      }
+    ],
     [
       "@semantic-release/git",
       {
