@@ -1,3 +1,5 @@
+bundle/
+executable/
 src/
 test/
 tsconfig.json
