@@ -6,13 +6,14 @@ tsconfig.json
 tsconfig.build.json
 nest-cli.json
 
-
 .releaserc.json
 .prettierrc
 .eslintrc.json
 .editorconfig
+esbuild.json
 
 .github
 .husky
 
 *.tsbuildinfo
+repl.*
