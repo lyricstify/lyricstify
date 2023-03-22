@@ -1,4 +1,4 @@
-name: Run Code Formats
+name: Run Code Style Checks
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ on:
       - test/**/*.ts
 
 jobs:
-  format-code:
+  code-style-check:
     runs-on: ubuntu-latest
 
     steps:

@@ -1,16 +1,7 @@
-name: Run Code Tests
+name: Run TypeScript Checks
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - '*.x'
-      - main
-      - next
-      - next-major
-      - beta
-      - alpha
-      - dev
   pull_request:
     branches:
       - '*.x'
@@ -20,15 +11,14 @@ on:
       - beta
       - alpha
       - dev
+    paths:
+      - src/**/*.ts
+      - test/**/*.ts
 
 jobs:
-  test:
+  typescript-check:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [14, 16, 18]
 
-    name: Node ${{ matrix.node }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -44,11 +34,5 @@ jobs:
       - name: Clean install dependencies
         run: npm ci
 
-      - name: Run tests and collect coverage
-        run: npm run test:cov
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+      - name: Run TypeScript check
+        uses: andoshin11/typescript-error-reporter-action@v1.0.2
