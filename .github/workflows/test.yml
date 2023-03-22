@@ -45,7 +45,7 @@ jobs:
         run: npm ci
 
       - name: Run tests and collect coverage
-        run: npm run test:cov
+        run: npm run test:cov -- --runInBand
 
       - name: Publish test report
         uses: mikepenz/action-junit-report@v3
