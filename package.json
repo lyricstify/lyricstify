@@ -130,6 +130,9 @@
       "jest-junit"
     ]
   },
+  "jest-junit": {
+    "reportTestSuiteErrors": true
+  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"

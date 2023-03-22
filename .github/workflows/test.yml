@@ -47,9 +47,9 @@ jobs:
       - name: Run tests and collect coverage
         run: npm run test:cov
 
-      - name: Publish Test Report
+      - name: Publish test report
         uses: mikepenz/action-junit-report@v3
-        if: ${{ github.event_name == 'pull_request' && (success() || failure()) }}
+        if: ${{ github.event_name == 'pull_request' && always() }}
         with:
           report_paths: junit.xml
 
