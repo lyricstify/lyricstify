@@ -125,12 +125,14 @@ describe('TokenService', () => {
     });
 
     it('should be able to fetch a new token from the existing refresh token if the token already expired or is not available', async () => {
+      const now = new Date();
+
       const expiredTokenEntity = createRandomTokenEntity({
-        createdAt: faker.date.recent(1).getTime(),
+        createdAt: new Date().setHours(now.getHours() - 2),
         expiresInSeconds: 3600,
       });
       const newTokenEntity = createRandomTokenEntity({
-        createdAt: new Date().getTime(),
+        createdAt: now.getTime(),
         expiresInSeconds: 3600,
       });
 

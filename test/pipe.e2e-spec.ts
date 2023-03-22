@@ -125,27 +125,28 @@ describe('PipeCommand (e2e)', () => {
   describe('pipe', () => {
     it('should be able to continuously show different lyrics to stdout if the currently playing progress is always changing', async () => {
       const lyrics = trackResponse.lyrics.lines;
+      const now = new Date();
       const currentlyPlaying = fakeCurrentlyPlaying({
         collection: [
           {
             ...currentlyPlayingResponse,
             progress_ms: lyrics.at(0)?.startTimeMs || 0,
-            timestamp: faker.date.soon(1).getTime(),
+            timestamp: new Date().setHours(now.getHours() + 1),
           },
           {
             ...currentlyPlayingResponse,
             progress_ms: lyrics.at(1)?.startTimeMs || 0,
-            timestamp: faker.date.soon(2).getTime(),
+            timestamp: new Date().setHours(now.getHours() + 2),
           },
           {
             ...currentlyPlayingResponse,
             progress_ms: lyrics.at(2)?.startTimeMs || 0,
-            timestamp: faker.date.soon(3).getTime(),
+            timestamp: new Date().setHours(now.getHours() + 3),
           },
           {
             ...currentlyPlayingResponse,
             progress_ms: lyrics.at(3)?.startTimeMs || 0,
-            timestamp: faker.date.soon(4).getTime(),
+            timestamp: new Date().setHours(now.getHours() + 4),
           },
         ] as SpotifyApi.CurrentlyPlayingResponse[],
       });
