@@ -38,22 +38,18 @@ describe('PipeCommand (e2e)', () => {
       lines: [
         {
           words: faker.lorem.lines(1),
-          endTimeMs: 0,
           startTimeMs: 1500,
         },
         {
           words: faker.lorem.lines(1),
-          endTimeMs: 0,
           startTimeMs: 3000,
         },
         {
           words: faker.lorem.lines(1),
-          endTimeMs: 0,
           startTimeMs: 4500,
         },
         {
           words: faker.lorem.lines(1),
-          endTimeMs: 0,
           startTimeMs: 6000,
         },
       ],

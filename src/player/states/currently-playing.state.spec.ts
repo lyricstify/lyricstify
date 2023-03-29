@@ -4,9 +4,9 @@ import { CurrentlyPlayingState } from './currently-playing.state.js';
 
 describe('CurrentlyPlayingState', () => {
   const lyrics: LineResponseInterface[] = [
-    { startTimeMs: 100, words: faker.lorem.sentences(), endTimeMs: 0 },
-    { startTimeMs: 200, words: faker.lorem.sentences(), endTimeMs: 0 },
-    { startTimeMs: 300, words: faker.lorem.sentences(), endTimeMs: 0 },
+    { startTimeMs: 100, words: faker.lorem.sentences() },
+    { startTimeMs: 200, words: faker.lorem.sentences() },
+    { startTimeMs: 300, words: faker.lorem.sentences() },
   ];
 
   describe('currentLyricIndexByProgressTime', () => {
