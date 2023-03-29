@@ -38,4 +38,4 @@ jobs:
           timeout_seconds: 600
           retry_on: error
           retry_wait_seconds: 300
-          command: npx semantic-release
+          command: npx semantic-release --dry-run
