@@ -8,14 +8,15 @@ export class StartOptionsDto extends PipeOptionsDto {
 
   constructor({
     verticalSpacing,
-    romaji,
+    romanize,
+    romanizationProvider,
     translateTo,
     highlightMarkup,
     delay,
     horizontalAlign,
     syncType,
   }: StartOptionsDto) {
-    super({ romaji, translateTo, delay, syncType });
+    super({ romanize, romanizationProvider, translateTo, delay, syncType });
     this.verticalSpacing = verticalSpacing;
     this.highlightMarkup = highlightMarkup;
     this.horizontalAlign = horizontalAlign;

@@ -1,37 +1,59 @@
-import { from } from 'rxjs';
+import { mergeMap, of } from 'rxjs';
 import { InitializationPipeFunction } from '../../interfaces/initialization-pipe-function.interface.js';
+import { RomanizationProviderChoicesType } from '../../types/romanization-provider-choices.type.js';
+import { googleTranslationAndRomanization } from './google-translation-and-romanization.pipe.js';
+import { kuroshiroRomanization } from './kuroshiro-romanization.pipe.js';
 
-export const translateSentences = (to: string): InitializationPipeFunction => {
-  const googleTranslateApi = import('@vitalets/google-translate-api');
+interface TranslateSentencesOptions {
+  to: string;
+  romanize: boolean;
+  romanizationProvider: RomanizationProviderChoicesType | false;
+  showTranslation: boolean;
+}
 
-  return (lines) => {
-    return from(
-      (async () => {
-        const lyrics = lines
-          .map((line) => line.words.split('\n').at(0))
-          .join('\n');
-
-        const translate = (await googleTranslateApi).translate;
-        const { text } = await translate(lyrics, {
+export const translateSentences = ({
+  to,
+  romanize,
+  romanizationProvider,
+  showTranslation,
+}: TranslateSentencesOptions): InitializationPipeFunction => {
+  const romanization = (() => {
+    switch (romanizationProvider) {
+      case 'gcloud':
+        return googleTranslationAndRomanization({
+          romanize,
+          showTranslation,
           to,
         });
 
-        const translatedLyrics = text.split('\n');
-        const translatedLines = lines.map((line, index) => {
-          const translatedLyric = translatedLyrics.at(index);
+      case 'kuroshiro':
+        return kuroshiroRomanization();
 
-          if (translatedLyric === undefined || translatedLyric === line.words) {
-            return line;
-          }
+      default:
+        return null;
+    }
+  })();
 
-          return {
-            ...line,
-            words: `${line.words}\n${translatedLyric}`,
-          };
-        });
+  const translation = (() => {
+    if (showTranslation !== false && romanizationProvider !== 'gcloud') {
+      return googleTranslationAndRomanization({
+        romanize,
+        showTranslation,
+        to,
+      });
+    }
 
-        return translatedLines;
-      })(),
+    return null;
+  })();
+
+  return (lines) => {
+    return of(lines).pipe(
+      mergeMap((value) =>
+        romanization !== null ? romanization(value) : of(value),
+      ),
+      mergeMap((value) =>
+        translation !== null ? translation(value) : of(value),
+      ),
     );
   };
 };

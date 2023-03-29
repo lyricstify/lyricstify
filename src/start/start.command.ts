@@ -27,13 +27,34 @@ export class StartCommand extends CommandRunner {
   }
 
   @Option({
-    flags: '--romaji',
+    flags: '--romanize',
     defaultValue: false,
     description:
-      'Add romanized Japanese sentences to the output lyrics if the lyrics contain Japanese characters.',
+      'Add romanized sentences to the output lyrics if the lyrics contain characters that can be romanized.',
   })
-  parseRomaji() {
+  parseRomanize() {
     return true;
+  }
+
+  @Option({
+    flags: '--romanization-provider <romanization-provider>',
+    defaultValue: 'kuroshiro',
+    description:
+      'Specify the provider used during the romanization\n' +
+      '• "gcloud" (EXPERIMENTAL) romanization using Google Translation Cloud service, this romanization provides more accurate romanization sentences but since the current status is experimental so it may be unstable and can cause some errors.\n' +
+      '• "kuroshiro" romanization using https://kuroshiro.org/ language library, only able to romanize Japanese sentences and has fewer romanization sentences but more stable compared to the gcloud.',
+    choices: true,
+    name: 'romanization provider choices',
+  })
+  parseRomanizationProvider(val: string) {
+    this.commandValidationService.validateRomanizationProviderOrFail(val);
+
+    return val;
+  }
+
+  @OptionChoiceFor({ name: 'romanization provider choices' })
+  chosenForRomanizationProviderChoices() {
+    return this.commandValidationService.romanizationProviderChoices();
   }
 
   @Option({

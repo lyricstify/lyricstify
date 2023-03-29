@@ -10,29 +10,31 @@ import { horizontalAlignRight } from './pipes/adjustment-phase/horizontal-align-
 import { verticalAlignCenter } from './pipes/adjustment-phase/vertical-align-center.pipe.js';
 import { wordWrap } from './pipes/adjustment-phase/word-wrap.pipe.js';
 import { addSpaceBetweenLines } from './pipes/initialization-phase/add-spaces-between-lines.pipe.js';
-import { romanizeJapaneseSentences } from './pipes/initialization-phase/romanize-japanese-sentences.pipe.js';
 import { translateSentences } from './pipes/initialization-phase/translate-sentences.pipe.js';
 import { highlightVerticallyCenteredLyrics } from './pipes/update-progress-phase/highlight-vertically-centered-lyrics.pipe.js';
 
 @Injectable()
 export class TransformationService {
-  initializationPipesFrom(
-    createInitializationPipeDto: CreateInitializationPipesDto,
-  ): InitializationPipeFunction[] {
+  initializationPipesFrom({
+    romanizeSentences: romanize,
+    romanizationProvider,
+    translateSentences: translate,
+    spaceBetweenLines,
+  }: CreateInitializationPipesDto): InitializationPipeFunction[] {
     return ([] as InitializationPipeFunction[])
       .concat(
-        createInitializationPipeDto.romanizeJapaneseSentences === true
-          ? romanizeJapaneseSentences()
+        translate !== false || romanize === true
+          ? translateSentences({
+              romanize,
+              romanizationProvider,
+              showTranslation: translate !== false,
+              to: typeof translate === 'boolean' ? 'en' : translate,
+            })
           : [],
       )
       .concat(
-        createInitializationPipeDto.translateSentences !== false
-          ? translateSentences(createInitializationPipeDto.translateSentences)
-          : [],
-      )
-      .concat(
-        createInitializationPipeDto.spaceBetweenLines !== false
-          ? addSpaceBetweenLines(createInitializationPipeDto.spaceBetweenLines)
+        spaceBetweenLines !== false
+          ? addSpaceBetweenLines(spaceBetweenLines)
           : [],
       );
   }

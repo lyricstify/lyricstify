@@ -43,7 +43,8 @@ describe('PipeService', () => {
 
       const { orchestraSubscriber } = pipeService.orchestra({
         delay: 0,
-        romaji: false,
+        romanize: false,
+        romanizationProvider: 'kuroshiro',
         translateTo: false,
         syncType: 'none',
       });
@@ -68,7 +69,8 @@ describe('PipeService', () => {
 
       const { orchestraSubscriber } = pipeService.orchestra({
         delay: 0,
-        romaji: false,
+        romanize: false,
+        romanizationProvider: 'kuroshiro',
         translateTo: false,
         syncType: 'none',
       });

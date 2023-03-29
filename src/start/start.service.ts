@@ -21,7 +21,8 @@ export class StartService {
 
   orchestra({
     delay,
-    romaji: romanizeJapaneseSentences,
+    romanize: romanizeSentences,
+    romanizationProvider,
     verticalSpacing: spaceBetweenLines,
     translateTo: translateSentences,
     highlightMarkup,
@@ -36,7 +37,8 @@ export class StartService {
       syncType,
       initializationPipes: this.transformationService.initializationPipesFrom(
         new CreateInitializationPipesDto({
-          romanizeJapaneseSentences,
+          romanizeSentences,
+          romanizationProvider,
           spaceBetweenLines,
           translateSentences,
         }),

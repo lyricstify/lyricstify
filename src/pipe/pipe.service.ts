@@ -14,7 +14,8 @@ export class PipeService {
 
   orchestra({
     delay,
-    romaji: romanizeJapaneseSentences,
+    romanize: romanizeSentences,
+    romanizationProvider,
     translateTo: translateSentences,
     syncType,
   }: PipeOptionsDto) {
@@ -23,7 +24,8 @@ export class PipeService {
       syncType,
       initializationPipes: this.transformationService.initializationPipesFrom(
         new CreateInitializationPipesDto({
-          romanizeJapaneseSentences,
+          romanizationProvider,
+          romanizeSentences,
           spaceBetweenLines: false,
           translateSentences,
         }),

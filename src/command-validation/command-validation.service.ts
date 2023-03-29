@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import chalk from 'chalk';
 import { SyncType } from '../player/types/sync-type.type.js';
 import { HorizontalAlignChoicesType } from '../transformation/types/horizontal-align-choices.type.js';
+import { RomanizationProviderChoicesType } from '../transformation/types/romanization-provider-choices.type.js';
 
 @Injectable()
 export class CommandValidationService {
@@ -89,6 +90,24 @@ export class CommandValidationService {
 
   syncTypeChoices(): SyncType[] {
     return ['none', 'balance', 'autoplay'];
+  }
+
+  validateRomanizationProviderOrFail(val: string) {
+    const choices = this.romanizationProviderChoices();
+
+    if (this.isPartOf(val, choices) === false) {
+      throw new Error(
+        chalk.redBright(
+          `<romanization-provider> should be one of the following options: ${choices.join(
+            ', ',
+          )}.`,
+        ),
+      );
+    }
+  }
+
+  romanizationProviderChoices(): RomanizationProviderChoicesType[] {
+    return ['gcloud', 'kuroshiro'];
   }
 
   private isPositiveNumber(val: number) {

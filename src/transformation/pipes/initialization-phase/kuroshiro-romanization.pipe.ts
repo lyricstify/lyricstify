@@ -3,7 +3,7 @@ import { InitializationPipeFunction } from '../../interfaces/initialization-pipe
 import Kuroshiro from 'kuroshiro';
 import KuromojiAnalyzer from 'kuroshiro-analyzer-kuromoji';
 
-export const romanizeJapaneseSentences = (): InitializationPipeFunction => {
+export const kuroshiroRomanization = (): InitializationPipeFunction => {
   const kuroshiro = new Kuroshiro();
   const initializeKuroshiro = kuroshiro.init(new KuromojiAnalyzer());
 
