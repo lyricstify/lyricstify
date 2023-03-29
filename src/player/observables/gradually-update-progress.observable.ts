@@ -23,9 +23,9 @@ export class GraduallyUpdateProgressObservable implements ObservableRunner {
       withLatestFrom(pollCurrentlyPlaying$),
       map(this.removeUnusedInitialValue),
       sharedScan(this.updateActiveLyricsState, new CurrentlyPlayingState({})),
-      repeatWith(this.repeatAfterDelayBetweenCurrentAndNextLyrics.bind(this)),
+      repeatWith(this.afterDelayBetweenCurrentAndNextLyrics.bind(this)),
       sharedPairwise(),
-      concatMap(this.skipEmitsToObserversIfUnchanged$),
+      concatMap(this.skipEmitsIfUnchanged$),
     );
   }
 
@@ -57,7 +57,7 @@ export class GraduallyUpdateProgressObservable implements ObservableRunner {
     });
   }
 
-  private repeatAfterDelayBetweenCurrentAndNextLyrics(
+  private afterDelayBetweenCurrentAndNextLyrics(
     val: CurrentlyPlayingState,
   ): RepeatConfig {
     const nextLyric = val.nextLyric();
@@ -79,7 +79,7 @@ export class GraduallyUpdateProgressObservable implements ObservableRunner {
     return { delay };
   }
 
-  private skipEmitsToObserversIfUnchanged$([prev, current]: [
+  private skipEmitsIfUnchanged$([prev, current]: [
     CurrentlyPlayingState | undefined,
     CurrentlyPlayingState,
   ]) {
