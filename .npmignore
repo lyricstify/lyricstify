@@ -2,9 +2,11 @@ bundle/
 executable/
 src/
 test/
+assets/
 tsconfig.json
 tsconfig.build.json
 nest-cli.json
+lyricstify.tape
 
 .releaserc.json
 .prettierrc
