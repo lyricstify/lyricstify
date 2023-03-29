@@ -38,19 +38,20 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 19
-          cache: 'npm'
+          node-version: ${{ matrix.node }}
+          cache: npm
 
       - name: Clean install dependencies
         run: npm ci
 
       - name: Run tests and collect coverage
-        run: npm run test:cov -- --runInBand
+        run: npm run test:ci
 
       - name: Publish test report
         uses: mikepenz/action-junit-report@v3
         if: ${{ github.event_name == 'pull_request' && always() }}
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           report_paths: junit.xml
 
       - name: Upload coverage to Codecov
