@@ -8,7 +8,6 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "commit": "cz",
     "build": "nest build",
     "build:bundle": "esbuild $(esbuild-config ./esbuild.json)",
     "build:executable": "pkg bundle/bundle.js --config=package.json --compress GZip",
@@ -20,6 +19,7 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "lint:ci": "eslint \"{src,apps,libs,test}/**/*.ts\" --format github",
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test:ci": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand",
     "test:watch": "jest --watch",
     "test:cov": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
     "test:debug": "node --experimental-vm-modules --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
