@@ -78,6 +78,7 @@
     "husky": "^8.0.0",
     "is-ci": "^3.0.1",
     "jest": "29.3.1",
+    "jest-junit": "^15.0.0",
     "nest-commander-testing": "^3.1.0",
     "pkg": "^5.8.1",
     "prettier": "^2.3.2",
@@ -123,7 +124,11 @@
       "!**/src/repl.*"
     ],
     "coverageDirectory": "<rootDir>/coverage/",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
   },
   "config": {
     "commitizen": {
