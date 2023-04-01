@@ -8,6 +8,7 @@ import { resolve } from 'path';
 import { defer, map, of, Subscription, tap } from 'rxjs';
 import { CliModule } from '../src/cli.module.js';
 import { DataSourceService } from '../src/common/data-source/data-source.service.js';
+import { ConfigService } from '../src/config/config.service.js';
 import { PipeOptionsDto } from '../src/pipe/dto/pipe-options.dto.js';
 import { PipeOrchestraObservable } from '../src/pipe/observables/pipe-orchestra.observable.js';
 import { PipeService } from '../src/pipe/pipe.service.js';
@@ -67,6 +68,12 @@ describe('PipeCommand (e2e)', () => {
     })
       .overrideProvider(DataSourceService)
       .useValue(new DataSourceService(configDir))
+      .overrideProvider(ConfigService)
+      .useValue({
+        retryDelay: 0,
+        retryCount: 0,
+        timeout: 0,
+      })
       .overrideProvider(PipeService)
       .useFactory({
         inject: [PipeOrchestraObservable, TransformationService],
