@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { firstValueFrom, map, retry } from 'rxjs';
+import { defer, firstValueFrom, map, retry, switchMap } from 'rxjs';
 import { throwAxiosErrorResponseIfAvailable } from '../common/rxjs/operators/throw-axios-error-response-if-available.operator.js';
 import { ConfigService } from '../config/config.service.js';
 import { TokenService } from '../token/token.service.js';
@@ -19,30 +19,31 @@ export class PlayerService {
   ) {}
 
   async currentlyPlaying() {
-    const token =
-      await this.tokenService.findOneOrCreateFromExistingRefreshToken();
-    const config: AxiosRequestConfig = {
-      timeout: this.configService.timeout,
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-        'Content-Type': 'application/json',
-        Host: 'api.spotify.com',
-      },
-    };
+    const request$ = defer(async () => {
+      const token =
+        await this.tokenService.findOneOrCreateFromExistingRefreshToken();
+      const config: AxiosRequestConfig = {
+        timeout: this.configService.timeout,
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+          'Content-Type': 'application/json',
+          Host: 'api.spotify.com',
+        },
+      };
 
-    const request$ = this.httpService
-      .get<SpotifyApi.CurrentlyPlayingResponse>(
+      return this.httpService.get<SpotifyApi.CurrentlyPlayingResponse>(
         `${this.playerApiOriginPath}currently-playing`,
         config,
-      )
-      .pipe(
-        retry({
-          delay: this.configService.retryDelay,
-          count: this.configService.retryCount,
-        }),
-        map(this.convertToCurrentlyPlayingDto),
-        throwAxiosErrorResponseIfAvailable(this.constructor.name),
       );
+    }).pipe(
+      retry({
+        delay: this.configService.retryDelay,
+        count: this.configService.retryCount,
+      }),
+      switchMap((val) => val),
+      map(this.convertToCurrentlyPlayingDto),
+      throwAxiosErrorResponseIfAvailable(this.constructor.name),
+    );
 
     return await firstValueFrom(request$);
   }
