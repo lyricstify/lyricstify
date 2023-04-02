@@ -1,6 +1,6 @@
 {
   "name": "@lyricstify/lyricstify",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Show synchronized Spotify lyrics in your terminal.",
   "keywords": [
     "music",
