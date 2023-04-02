@@ -96,23 +96,17 @@ When using this installation option, you also need to install [Node.js](https://
 
 Before you can use Lyricstify, you need to generate the Client ID and Client Secret of your Spotify account. To do so you can follow these steps:
 
-- Go to [your Spotify Applications Dashboard](https://developer.spotify.com/dashboard/) and click on the _Create an App_ button.
-- Enter an _App Name_ and _App Description_ of your choice (they will be displayed to the user on the grant screen), put a tick in the _Developer Terms of Service_ checkbox and finally click on _CREATE_.
+- Go to [your Spotify Applications Dashboard](https://developer.spotify.com/dashboard/) and click on the _Create app_ button.
+- Enter an _App name_ and _App description_ of your choice (they will be displayed to the user on the grant screen)
+- Pay attention to _Redirect URI_, fill in `http://localhost:3000/api/v1/authorize`.
 
-  ![Create App Dialog!](https://ik.imagekit.io/snwxmen1z/assets/tr:w-300/createappdialog.png)
+  > If port 3000 on your OS is already in use by another application, you can replace it with another unused URI port like `http://localhost:8080/api/v1/authorize`. Just make sure you fill in the same port number when running the `lyricstify init` command.
 
-- Open your created app, and you will see the _Client ID_ and _SHOW CLIENT SECRET_ button. You can copy this Client ID and Client Secret to your Notepad and we will use it later.
+- Put a tick in the _Developer Terms of Service_ checkbox and finally click on _Save_.
 
-  ![App Overview!](https://ik.imagekit.io/snwxmen1z/assets/tr:h-150/app_overview.png)
+- Open your created app, go to _Settings_ and you will see the _Client ID_ and _View client secret_ button. You can copy this Client ID and Client secret to your Notepad and we will use it later.
 
   > Always store the client secret key securely, never reveal it publicly! If you suspect that the secret key has been compromised, regenerate it immediately by clicking the _ROTATE_ button on the app overview page.
-
-- It is time to configure our app. Click on _Edit Settings_ to view and update your app settings.
-
-  ![Edit Settings!](https://ik.imagekit.io/snwxmen1z/assets/tr:w-300/dashboardeditsettings.png)
-
-- Pay attention to _Redirect URIs_, fill in `http://localhost:3000/api/v1/authorize`, then click the _ADD_ button and finally click on the _SAVE_ button.
-  > If port 3000 on your OS is already in use by another application, you can replace it with another unused URI port like `http://localhost:8080/api/v1/authorize`. Just make sure you fill in the same port number when running the `lyricstify init` command.
 
 After you already get the Client ID and Client Secret, now you are ready to start using Lyricstify. Simply run this command in your terminal:
 
