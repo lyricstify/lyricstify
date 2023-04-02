@@ -160,12 +160,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yusuftaufiq/lyricstify-ci-cd.git"
+    "url": "git+https://github.com/lyricstify/lyricstify.git"
   },
   "bugs": {
-    "url": "https://github.com/yusuftaufiq/lyricstify-ci-cd/issues"
+    "url": "https://github.com/lyricstify/lyricstify/issues"
   },
-  "homepage": "https://github.com/yusuftaufiq/lyricstify-ci-cd#readme",
+  "homepage": "https://github.com/lyricstify/lyricstify#readme",
   "pkg": {
     "outputPath": "executable",
     "targets": [
