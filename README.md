@@ -2,6 +2,7 @@
   <p><a href="https://github.com/lyricstify/lyricstify"><img src="https://raw.githubusercontent.com/lyricstify/lyricstify/main/assets/lyricstify.svg" alt="Lyricstify Logo" height="60"/></a></p>
   <h1>Lyricstify</h1>
   <p>Show synchronized Spotify lyrics in your terminal.</p>
+  <p><img src="https://raw.githubusercontent.com/lyricstify/lyricstify/main/assets/lyricstify.gif" width="600"/></p>
   <p>
     <img alt="GitHub Workflow Test Status" src="https://img.shields.io/github/actions/workflow/status/lyricstify/lyricstify/test.yml?label=test&logo=github&style=flat-square&color=1ed760">
     <img alt="Code Coverage" src="https://img.shields.io/codecov/c/github/lyricstify/lyricstify?color=white&logo=codecov&style=flat-square">
@@ -12,25 +13,30 @@
     <img alt="TypeScript Version" src="https://img.shields.io/github/package-json/dependency-version/lyricstify/lyricstify/dev/typescript?color=1ed760&logo=typescript&style=flat-square">
     <img alt="RxJs Version" src="https://img.shields.io/github/package-json/dependency-version/lyricstify/lyricstify/rxjs?logo=reactivex&logoColor=red&style=flat-square&color=white">
   </p>
-  <p><img src="https://raw.githubusercontent.com/lyricstify/lyricstify/main/assets/lyricstify.gif" width="600"/></p>
-  <p>
-    <a href="#introduction">Introduction</a>
-    ·
-    <a href="#installation">Installation</a>
-    ·
-    <a href="#usage-and-features">Usage and Features</a>
-    ·
-    <a href="#compatibility">Compatibility</a>
-    ·
-    <a href="#roadmap">Roadmap</a>
-    ·
-    <a href="#contributing">Contributing</a>
-    ·
-    <a href="#license">License</a>
-  </p>
 </div>
 
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Why Lyrisctify](#why-lyricstify)
+- [Installation](#installation)
+  - [Using NPM (Node Package Manager) - recommended for most use cases](#using-npm-node-package-manager---recommended-for-most-use-cases)
+  - [Cross-platform single executable file, 0 dependencies](#cross-platform-single-executable-file-0-dependencies)
+  - [Build it yourself!](#build-it-yourself)
+- [Usage and Features](#usage-and-features)
+  - [Initializing Configuration](#initializing-configuration)
+  - [Starting Lyricstify](#starting-lyricstify)
+  - [Core available options](#core-available-options)
+- [Compatibility](#compatibility)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Introduction
+
+Lyricstify is a command line application to show synchronized lyrics in the terminal based on the currently playing song in your Spotify account.
+
+## Why Lyricstify
 
 Although the official Spotify client already has a good app that can display synchronized lyrics, it still misses the most anticipated features like romanization and translation, especially when using its desktop and web client.
 
@@ -144,6 +150,10 @@ Here are two choices for starting Lyricstify:
   # Transform odd line output to green and even line to white
   lyricstify pipe | awk '{if(NR%2==1) print "\033[32m" $0 "\033[0m"; else print $0}'
   ```
+
+And the lyrics will automatically appear on your terminal when you play songs on your Spotify account.
+
+> With notes, it doesn't matter which Spotify client you use to play music on your account. Whether it's Spotify Desktop, Web, Mobile, or other custom clients (such as Spicetify), as long as the account you used to initialize the configuration is playing songs that have lyrics, Lyricstify will display those lyrics automatically.
 
 ### Core available options
 
