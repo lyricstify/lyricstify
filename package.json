@@ -58,8 +58,7 @@
     "ora": "^6.1.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "terminal-kit": "^3.0.0",
-    "terminal-link": "^3.0.0"
+    "terminal-kit": "^3.0.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

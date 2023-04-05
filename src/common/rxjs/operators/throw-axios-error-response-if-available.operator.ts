@@ -1,7 +1,6 @@
 import { isAxiosError } from 'axios';
 import chalk from 'chalk';
 import { catchError, MonoTypeOperatorFunction, pipe, throwError } from 'rxjs';
-import terminalLink from 'terminal-link';
 
 export const throwAxiosErrorResponseIfAvailable = <T>(
   from: string,
@@ -16,10 +15,7 @@ export const throwAxiosErrorResponseIfAvailable = <T>(
             error.response?.data,
           )}\n\nSource: ${from}\n\nPlease rerun the related command again or try to run ${chalk.inverse(
             'lyricstify init',
-          )}. If this does not solve your problem feel free to open a new issue to ${terminalLink(
-            'this link',
-            'https://github.com/lyricstify/lyricstify/issues/',
-          )}.`;
+          )}. If this does not solve your problem feel free to open a new issue to https://github.com/lyricstify/lyricstify/issues/`;
 
           return new Error(message);
         }

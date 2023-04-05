@@ -7,7 +7,6 @@ import {
   ValidateFor,
   WhenFor,
 } from 'nest-commander';
-import terminalLink from 'terminal-link';
 import { ClientService } from '../client/client.service.js';
 import { CommandValidationService } from '../command-validation/command-validation.service.js';
 import { InitializeOptionsInterface } from './interfaces/initialize-options.interface.js';
@@ -33,10 +32,7 @@ export class InitializeQuestion {
       return 'We detected that there was already a previously saved configuration. Do you want to update it?';
     }
 
-    const link = terminalLink(
-      'this page first',
-      'https://github.com/lyricstify/lyricstify/',
-    );
+    const link = 'https://github.com/lyricstify/lyricstify/';
 
     return `Welcome to Lyricstify! Please follow the guide on ${chalk.bold(
       link,
