@@ -6,7 +6,6 @@ import {
   Option,
 } from 'nest-commander';
 import ora from 'ora';
-import terminalLink from 'terminal-link';
 import { CommandValidationService } from '../command-validation/command-validation.service.js';
 import { InitializeOptionsDto } from './dto/initialize-options.dto.js';
 import { RequestAuthorizationDto } from './dto/request-authorization.dto.js';
@@ -46,11 +45,7 @@ export class InitializeCommand extends CommandRunner {
       requestAuthorizationDto,
     );
 
-    console.info(
-      `Please open ${chalk.bold(
-        terminalLink('this link', link),
-      )} to start authorize.`,
-    );
+    console.info(`Please open ${chalk.bold(link)} to start authorize.`);
 
     const loading = ora('We are waiting for you to finish.').start();
     const result = await this.initializeService.authorize(initializeOptionsDto);
