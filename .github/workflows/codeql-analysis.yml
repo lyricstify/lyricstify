@@ -1,0 +1,49 @@
+name: Run Code Scans
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '*.x'
+      - main
+      - next
+      - next-major
+      - beta
+      - alpha
+      - dev
+  pull_request:
+    branches:
+      - '*.x'
+      - main
+      - next
+      - next-major
+      - beta
+      - alpha
+      - dev
+  schedule:
+    - cron: '30 1 * * 0'
+
+jobs:
+  code-ql-build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: typescript
+          source-root: src
+
+      - name: Auto build
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v2
