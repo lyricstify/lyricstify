@@ -238,6 +238,7 @@ Here is a list of Lyricstify compatibility in various terminals and operating sy
 | Linux | Bash           | ✓      |                  |
 |       | GNOME Terminal | ✓      |                  |
 |       | Tilda          | ✓      |                  |
+|       | Xfce Terminal  | ✓      |                  |
 
 ## Roadmap
 
