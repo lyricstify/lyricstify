@@ -235,10 +235,11 @@ Here is a list of Lyricstify compatibility in various terminals and operating sy
 
 | OS    | Terminal       | Status | Additional Notes |
 | ----- | -------------- | ------ | ---------------- |
-| Linux | Bash           | ✓      |                  |
-|       | GNOME Terminal | ✓      |                  |
+| Linux | GNOME Terminal | ✓      |                  |
 |       | Tilda          | ✓      |                  |
 |       | Xfce Terminal  | ✓      |                  |
+|       | Kitty          | ✓      |                  |
+|       | Hyper          | ✓      |                  |
 
 ## Roadmap
 
