@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/lyricstify/lyricstify/compare/v1.0.6...v1.0.7) (2023-04-13)
+
+
+### Bug Fixes
+
+* **transformation:** change steps to combine lyrics and translation ([7eaf5d0](https://github.com/lyricstify/lyricstify/commit/7eaf5d0489dfde17f4c82d3212aed2dab128fa91))
+
 ## [1.0.6](https://github.com/lyricstify/lyricstify/compare/v1.0.5...v1.0.6) (2023-04-05)
 
 
