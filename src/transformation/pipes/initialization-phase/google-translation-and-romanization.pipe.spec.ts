@@ -46,10 +46,7 @@ describe('googleTranslationAndRomanization', () => {
       ] as SourceTranslation[];
 
       jest.unstable_mockModule('@vitalets/google-translate-api', () => ({
-        translate: jest.fn().mockReturnValue({
-          text: '',
-          raw: { sentences },
-        }),
+        translate: jest.fn().mockReturnValue({ raw: { sentences } }),
       }));
 
       const result = await firstValueFrom(
@@ -72,7 +69,16 @@ describe('googleTranslationAndRomanization', () => {
       const lyrics = createRandomLinesResponse({ count: 1 });
 
       jest.unstable_mockModule('@vitalets/google-translate-api', () => ({
-        translate: jest.fn().mockReturnValue({ text, raw: { sentences: [] } }),
+        translate: jest.fn().mockReturnValue({
+          raw: {
+            sentences: [
+              {
+                trans: text,
+                orig: lyrics.at(0)?.words,
+              },
+            ],
+          },
+        }),
       }));
 
       const result = await firstValueFrom(
