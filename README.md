@@ -18,7 +18,7 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Why Lyrisctify](#why-lyricstify)
+- [Why Lyricstify?](#why-lyricstify)
 - [Installation](#installation)
   - [Using NPM (Node Package Manager) - recommended for most use cases](#using-npm-node-package-manager---recommended-for-most-use-cases)
   - [Cross-platform single executable file, 0 dependencies](#cross-platform-single-executable-file-0-dependencies)
@@ -36,7 +36,7 @@
 
 Lyricstify is a command line application to show synchronized lyrics in the terminal based on the currently playing song in your Spotify account.
 
-## Why Lyricstify
+## Why Lyricstify?
 
 Although the official Spotify client already has a good app that can display synchronized lyrics, it still misses the most anticipated features like romanization and translation, especially when using its desktop and web client.
 
