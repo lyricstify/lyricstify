@@ -72,7 +72,7 @@ export class StartService {
       },
       next: ({ content, cursor }) => {
         textBox.setContent(content, true);
-        textBox.scrollTo(0, cursor - 1);
+        textBox.scrollTo(0, cursor);
       },
     });
 
