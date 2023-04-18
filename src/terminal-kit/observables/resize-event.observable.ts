@@ -29,7 +29,7 @@ export class ResizeEventObservable implements ObservableRunner {
     [currentWidth, currentHeight],
   ]: [ResizeEventInterface, ResizeEventInterface]) {
     return new TerminalSizeState({
-      height: currentHeight,
+      height: currentHeight % 2 === 0 ? currentHeight - 1 : currentHeight,
       width: currentWidth,
       isResized: prevWidth !== currentWidth || prevHeight !== currentHeight,
     });
