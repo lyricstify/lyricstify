@@ -1,3 +1,17 @@
+# [1.1.0](https://github.com/lyricstify/lyricstify/compare/v1.0.7...v1.1.0) (2023-04-19)
+
+
+### Bug Fixes
+
+* **command-validation:** allow to use 0 vertical spacing ([0da5b6c](https://github.com/lyricstify/lyricstify/commit/0da5b6c92a211edb1a85a2b66181dfdf454bef01))
+* **command-validation:** improve vertical spacing error description ([01a8068](https://github.com/lyricstify/lyricstify/commit/01a80684bed76c78da64481edc9d0d98c81cf2de))
+* **start:** update active lyrics position calculation ([6c37e9e](https://github.com/lyricstify/lyricstify/commit/6c37e9e03d010ffe1924df858d79b2950f81c4db))
+
+
+### Features
+
+* **transformation:** add options to hide source lyrics ([69d5543](https://github.com/lyricstify/lyricstify/commit/69d554350296749dfa9ed16f2ef871c9310b20f3))
+
 ## [1.0.7](https://github.com/lyricstify/lyricstify/compare/v1.0.6...v1.0.7) (2023-04-13)
 
 
