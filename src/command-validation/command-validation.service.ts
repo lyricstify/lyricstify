@@ -43,7 +43,9 @@ export class CommandValidationService {
   validateVerticalSpacingOptionOrFail(verticalSpacing: number) {
     if (verticalSpacing < 0) {
       throw new Error(
-        chalk.redBright('<vertical-spacing> should be a valid number'),
+        chalk.redBright(
+          '<vertical-spacing> should be a valid number greater than or equal to 0',
+        ),
       );
     }
   }
