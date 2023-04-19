@@ -28,6 +28,7 @@ export class StartService {
     highlightMarkup,
     horizontalAlign,
     syncType,
+    hideSourceLyrics,
   }: StartOptionsDto) {
     const { terminal, textBox } = this.terminalKitService.spawn();
     const keypress$ = this.terminalKeypressEvent.run({ terminal });
@@ -41,6 +42,7 @@ export class StartService {
           romanizationProvider,
           spaceBetweenLines,
           translateSentences,
+          hideSourceLyrics,
         }),
       ),
       adjustmentPipes: this.transformationService.adjustmentPipesFrom(

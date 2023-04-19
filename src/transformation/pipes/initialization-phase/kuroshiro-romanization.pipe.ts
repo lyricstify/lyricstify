@@ -3,7 +3,11 @@ import { InitializationPipeFunction } from '../../interfaces/initialization-pipe
 import Kuroshiro from 'kuroshiro';
 import KuromojiAnalyzer from 'kuroshiro-analyzer-kuromoji';
 
-export const kuroshiroRomanization = (): InitializationPipeFunction => {
+export const kuroshiroRomanization = ({
+  hideSourceLyrics,
+}: {
+  hideSourceLyrics: boolean;
+}): InitializationPipeFunction => {
   const kuroshiro = new Kuroshiro();
   const initializeKuroshiro = kuroshiro.init(new KuromojiAnalyzer());
 
@@ -22,7 +26,10 @@ export const kuroshiroRomanization = (): InitializationPipeFunction => {
             mode: 'spaced',
           });
 
-          return { ...line, words: `${line.words}\n${roman}` };
+          const words =
+            hideSourceLyrics === true ? roman : `${line.words}\n${roman}`;
+
+          return { ...line, words };
         });
 
         return Promise.all(romanizedLines);

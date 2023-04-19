@@ -18,6 +18,7 @@ export class PipeService {
     romanizationProvider,
     translateTo: translateSentences,
     syncType,
+    hideSourceLyrics,
   }: PipeOptionsDto) {
     const orchestra$ = this.pipeOrchestraObservable.run({
       delay,
@@ -28,6 +29,7 @@ export class PipeService {
           romanizeSentences,
           spaceBetweenLines: false,
           translateSentences,
+          hideSourceLyrics,
         }),
       ),
     });

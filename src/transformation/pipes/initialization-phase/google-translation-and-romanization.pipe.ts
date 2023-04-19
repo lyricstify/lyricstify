@@ -9,6 +9,7 @@ interface GoogleTranslationOptions {
   to: string;
   romanize: boolean;
   showTranslation: boolean;
+  hideSourceLyrics: boolean;
 }
 
 const isSourceTranslation = (value: unknown): value is SourceTranslation =>
@@ -28,6 +29,7 @@ export const googleTranslationAndRomanization = ({
   to,
   romanize,
   showTranslation,
+  hideSourceLyrics,
 }: GoogleTranslationOptions): InitializationPipeFunction => {
   const googleTranslateApi = import('@vitalets/google-translate-api');
 
@@ -76,27 +78,28 @@ export const googleTranslationAndRomanization = ({
 
         const translatedLines = lines.map((line, index) => {
           const translatedLyric = translatedLyrics.at(index);
+          const isTranslated =
+            showTranslation === true &&
+            translatedLyric !== undefined &&
+            translatedLyric.replace(/\s/g, '') !==
+              line.words.replace(/\s/g, '');
           const romanizedLyric = romanizedLyrics.at(index);
+          const isRomanized =
+            romanize === true &&
+            romanizedLyric !== undefined &&
+            romanizedLyric.replace(/\s/g, '') !== line.words.replace(/\s/g, '');
 
           return {
             ...line,
-            words: ([line.words] as string[])
+            words: ([] as string[])
               .concat(
-                romanize === true &&
-                  romanizedLyric !== undefined &&
-                  romanizedLyric.replace(/\s/g, '') !==
-                    line.words.replace(/\s/g, '')
-                  ? romanizedLyric.trim()
-                  : [],
+                (isRomanized === true || isTranslated === true) &&
+                  hideSourceLyrics === true
+                  ? []
+                  : line.words,
               )
-              .concat(
-                showTranslation === true &&
-                  translatedLyric !== undefined &&
-                  translatedLyric.replace(/\s/g, '') !==
-                    line.words.replace(/\s/g, '')
-                  ? translatedLyric.trim()
-                  : [],
-              )
+              .concat(isRomanized ? romanizedLyric.trim() : [])
+              .concat(isTranslated ? translatedLyric.trim() : [])
               .join('\n'),
           };
         });

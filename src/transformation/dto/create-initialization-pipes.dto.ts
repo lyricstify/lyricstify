@@ -5,12 +5,14 @@ export class CreateInitializationPipesDto {
   romanizeSentences: boolean;
   romanizationProvider: RomanizationProviderChoicesType | false;
   translateSentences: string | false;
+  hideSourceLyrics: boolean;
 
   constructor({
     spaceBetweenLines,
     romanizeSentences,
     romanizationProvider,
     translateSentences,
+    hideSourceLyrics,
   }: Omit<CreateInitializationPipesDto, 'spaceBetweenLines'> & {
     spaceBetweenLines: false | number | undefined;
   }) {
@@ -23,5 +25,6 @@ export class CreateInitializationPipesDto {
     this.romanizeSentences = romanizeSentences;
     this.romanizationProvider = romanizationProvider;
     this.translateSentences = translateSentences;
+    this.hideSourceLyrics = hideSourceLyrics;
   }
 }
