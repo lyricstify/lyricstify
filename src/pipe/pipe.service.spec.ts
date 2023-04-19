@@ -47,6 +47,7 @@ describe('PipeService', () => {
         romanizationProvider: 'kuroshiro',
         translateTo: false,
         syncType: 'none',
+        hideSourceLyrics: false,
       });
 
       expect(consoleSpy).toHaveBeenCalledWith(contentState.content);
@@ -73,6 +74,7 @@ describe('PipeService', () => {
         romanizationProvider: 'kuroshiro',
         translateTo: false,
         syncType: 'none',
+        hideSourceLyrics: false,
       });
 
       expect(consoleSpy).toHaveBeenCalledWith(

@@ -7,6 +7,7 @@ export class PipeOptionsDto {
   translateTo: string | false;
   delay: number;
   syncType: SyncType;
+  hideSourceLyrics: boolean;
 
   constructor({
     romanize,
@@ -14,11 +15,13 @@ export class PipeOptionsDto {
     translateTo,
     delay,
     syncType,
+    hideSourceLyrics,
   }: PipeOptionsDto) {
     this.romanize = romanize;
     this.romanizationProvider = romanizationProvider;
     this.translateTo = translateTo;
     this.delay = delay;
     this.syncType = syncType;
+    this.hideSourceLyrics = hideSourceLyrics;
   }
 }

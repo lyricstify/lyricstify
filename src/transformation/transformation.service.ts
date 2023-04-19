@@ -20,6 +20,7 @@ export class TransformationService {
     romanizationProvider,
     translateSentences: translate,
     spaceBetweenLines,
+    hideSourceLyrics,
   }: CreateInitializationPipesDto): InitializationPipeFunction[] {
     return ([] as InitializationPipeFunction[])
       .concat(
@@ -29,6 +30,7 @@ export class TransformationService {
               romanizationProvider,
               showTranslation: translate !== false,
               to: typeof translate === 'boolean' ? 'en' : translate,
+              hideSourceLyrics,
             })
           : [],
       )

@@ -9,6 +9,7 @@ interface TranslateSentencesOptions {
   romanize: boolean;
   romanizationProvider: RomanizationProviderChoicesType | false;
   showTranslation: boolean;
+  hideSourceLyrics: boolean;
 }
 
 export const translateSentences = ({
@@ -16,6 +17,7 @@ export const translateSentences = ({
   romanize,
   romanizationProvider,
   showTranslation,
+  hideSourceLyrics,
 }: TranslateSentencesOptions): InitializationPipeFunction => {
   const romanization = (() => {
     switch (romanizationProvider) {
@@ -24,10 +26,11 @@ export const translateSentences = ({
           romanize,
           showTranslation,
           to,
+          hideSourceLyrics,
         });
 
       case 'kuroshiro':
-        return kuroshiroRomanization();
+        return kuroshiroRomanization({ hideSourceLyrics });
 
       default:
         return null;
@@ -40,6 +43,7 @@ export const translateSentences = ({
         romanize,
         showTranslation,
         to,
+        hideSourceLyrics,
       });
     }
 

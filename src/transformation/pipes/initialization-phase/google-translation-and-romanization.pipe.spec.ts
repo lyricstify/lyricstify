@@ -29,12 +29,39 @@ describe('googleTranslationAndRomanization', () => {
           to: 'en',
           romanize: true,
           showTranslation: false,
+          hideSourceLyrics: false,
         })(lyrics),
       );
       const lines = result.at(0)?.words.split('\n');
 
       expect(lines?.at(0)).toBe(lyrics.at(0)?.words);
       expect(lines?.at(1)).toBe(sentences.at(0)?.src_translit);
+    });
+
+    it('should be able to hide source lyrics if sentences can be romanized', async () => {
+      const sentences = [
+        {
+          src_translit: faker.lorem.sentences(),
+        },
+      ] as SourceTranslation[];
+      const lyrics = createRandomLinesResponse({ count: 1 });
+
+      jest.unstable_mockModule('@vitalets/google-translate-api', () => ({
+        translate: jest.fn().mockReturnValue({ text: '', raw: { sentences } }),
+      }));
+
+      const result = await firstValueFrom(
+        googleTranslationAndRomanization({
+          to: 'en',
+          romanize: true,
+          showTranslation: false,
+          hideSourceLyrics: true,
+        })(lyrics),
+      );
+      const lines = result.at(0)?.words.split('\n');
+
+      expect(lines).toHaveLength(1);
+      expect(lines?.at(0)).toBe(sentences.at(0)?.src_translit);
     });
 
     it('should be able to skip adding non romanized sentences to new lines', async () => {
@@ -54,6 +81,7 @@ describe('googleTranslationAndRomanization', () => {
           to: 'en',
           romanize: true,
           showTranslation: false,
+          hideSourceLyrics: false,
         })(lyrics),
       );
       const lines = result.at(0)?.words.split('\n');
@@ -86,12 +114,44 @@ describe('googleTranslationAndRomanization', () => {
           to: 'en',
           romanize: false,
           showTranslation: true,
+          hideSourceLyrics: false,
         })(lyrics),
       );
       const lines = result.at(0)?.words.split('\n');
 
       expect(lines?.at(0)).toBe(lyrics.at(0)?.words);
       expect(lines?.at(1)).toBe(text);
+    });
+
+    it('should be able to hide source lyrics if sentences can be translated', async () => {
+      const text = faker.lorem.sentences();
+      const lyrics = createRandomLinesResponse({ count: 1 });
+
+      jest.unstable_mockModule('@vitalets/google-translate-api', () => ({
+        translate: jest.fn().mockReturnValue({
+          raw: {
+            sentences: [
+              {
+                trans: text,
+                orig: lyrics.at(0)?.words,
+              },
+            ],
+          },
+        }),
+      }));
+
+      const result = await firstValueFrom(
+        googleTranslationAndRomanization({
+          to: 'en',
+          romanize: false,
+          showTranslation: true,
+          hideSourceLyrics: true,
+        })(lyrics),
+      );
+      const lines = result.at(0)?.words.split('\n');
+
+      expect(lines).toHaveLength(1);
+      expect(lines?.at(0)).toBe(text);
     });
 
     it('should be able to skip adding untranslated sentences to new lines', async () => {
@@ -109,6 +169,7 @@ describe('googleTranslationAndRomanization', () => {
           to: 'en',
           romanize: false,
           showTranslation: true,
+          hideSourceLyrics: false,
         })(lyrics),
       );
       const lines = result.at(0)?.words.split('\n');

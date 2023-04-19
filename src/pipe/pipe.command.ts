@@ -102,4 +102,14 @@ export class PipeCommand extends CommandRunner {
   chosenForSyncTypeChoices() {
     return this.commandValidationService.syncTypeChoices();
   }
+
+  @Option({
+    flags: '--hide-source-lyrics',
+    defaultValue: false,
+    description:
+      'Hide source lyrics when using romanization or translation. So, only romanized or translated lyrics that displayed.',
+  })
+  parseHideSourceLyrics() {
+    return true;
+  }
 }
