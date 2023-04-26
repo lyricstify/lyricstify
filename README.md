@@ -4,14 +4,14 @@
   <p>Show synchronized Spotify lyrics in your terminal.</p>
   <p><img src="https://raw.githubusercontent.com/lyricstify/lyricstify/main/assets/lyricstify.gif" width="600"/></p>
   <p>
-    <img alt="GitHub Workflow Test Status" src="https://img.shields.io/github/actions/workflow/status/lyricstify/lyricstify/test.yml?label=test&logo=github&style=flat-square&color=1ed760">
-    <img alt="Code Coverage" src="https://img.shields.io/codecov/c/github/lyricstify/lyricstify?color=white&logo=codecov&style=flat-square">
-    <img alt="NPM Version" src="https://img.shields.io/npm/v/@lyricstify/lyricstify?color=1ed760&logo=npm&&style=flat-square">
-    <img alt="License" src="https://img.shields.io/npm/l/@lyricstify/lyricstify?color=white&style=flat-square">
-    <img alt="Semantic Release" src="https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release&color=1ed760&style=flat-square">
-    <img alt="NestJs Version" src="https://img.shields.io/github/package-json/dependency-version/lyricstify/lyricstify/@nestjs/core?logo=nestjs&logoColor=red&style=flat-square&color=white">
-    <img alt="TypeScript Version" src="https://img.shields.io/github/package-json/dependency-version/lyricstify/lyricstify/dev/typescript?color=1ed760&logo=typescript&style=flat-square">
-    <img alt="RxJs Version" src="https://img.shields.io/github/package-json/dependency-version/lyricstify/lyricstify/rxjs?logo=reactivex&logoColor=red&style=flat-square&color=white">
+    <img alt="GitHub Workflow Test Status" src="https://img.shields.io/github/actions/workflow/status/lyricstify/lyricstify/test.yml?label=test&logo=github&style=flat&color=1ed760">
+    <img alt="Code Coverage" src="https://img.shields.io/codecov/c/github/lyricstify/lyricstify?color=white&logo=codecov&style=flat">
+    <img alt="NPM Version" src="https://img.shields.io/npm/v/@lyricstify/lyricstify?color=1ed760&logo=npm&&style=flat">
+    <img alt="License" src="https://img.shields.io/npm/l/@lyricstify/lyricstify?color=white&style=flat">
+    <img alt="Semantic Release" src="https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release&color=1ed760&style=flat">
+    <img alt="NestJs Version" src="https://img.shields.io/github/package-json/dependency-version/lyricstify/lyricstify/@nestjs/core?logo=nestjs&logoColor=red&style=flat&color=white">
+    <img alt="TypeScript Version" src="https://img.shields.io/github/package-json/dependency-version/lyricstify/lyricstify/dev/typescript?color=1ed760&logo=typescript&style=flat">
+    <img alt="RxJs Version" src="https://img.shields.io/github/package-json/dependency-version/lyricstify/lyricstify/rxjs?logo=reactivex&logoColor=red&style=flat&color=white">
   </p>
 </div>
 
