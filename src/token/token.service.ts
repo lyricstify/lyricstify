@@ -16,6 +16,8 @@ export class TokenService {
   private readonly requestFreshTokenOriginPath =
     'https://accounts.spotify.com/api/token';
 
+  private tokenEntity: TokenEntity | null = null;
+
   constructor(
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
@@ -71,20 +73,25 @@ export class TokenService {
   }
 
   async findOneOrCreateFromExistingRefreshToken() {
-    const token = await this.findOne();
+    this.tokenEntity ||= await this.findOne();
 
-    if (token !== null) {
-      const isExpired =
-        token.expiresInSeconds * 1000 + token.createdAt <= new Date().getTime();
+    if (this.tokenEntity !== null) {
+      const expiredTime =
+        (this.tokenEntity.expiresInSeconds + 5) * 1000 +
+        this.tokenEntity.createdAt;
+      const isExpired = expiredTime <= new Date().getTime();
 
       if (isExpired === false) {
-        return token;
+        return this.tokenEntity;
       }
     }
 
     const refreshToken =
       await this.refreshTokenService.findOneOrCreateFromExistingClient();
-    return await this.replaceFrom(refreshToken);
+
+    this.tokenEntity = await this.replaceFrom(refreshToken);
+
+    return this.tokenEntity;
   }
 
   private convertToCreateTokenDto({
