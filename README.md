@@ -238,6 +238,16 @@ And the lyrics will automatically appear on your terminal when you play songs on
   lyricstify start --highlight-markup ^G
   ```
 
+- `--hide-source-lyrics`
+
+  Hide source lyrics when using romanization or translation. So, only romanized or translated lyrics that displayed. (default: false)
+
+  ```bash
+  lyricstify start --hide-source-lyrics
+  # or
+  lyricstify pipe --hide-source-lyrics
+  ```
+
 > To see all other available options for each command, simply use the `--help` option after each command. E.g:
 >
 > - `lyricstify --help`
