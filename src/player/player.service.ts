@@ -31,16 +31,18 @@ export class PlayerService {
         },
       };
 
-      return this.httpService.get<SpotifyApi.CurrentlyPlayingResponse>(
-        `${this.playerApiOriginPath}currently-playing`,
-        config,
-      );
+      return config;
     }).pipe(
+      switchMap((config) =>
+        this.httpService.get<SpotifyApi.CurrentlyPlayingResponse>(
+          `${this.playerApiOriginPath}currently-playing`,
+          config,
+        ),
+      ),
       retry({
         delay: this.configService.retryDelay,
         count: this.configService.retryCount,
       }),
-      switchMap((val) => val),
       map(this.convertToCurrentlyPlayingDto),
       throwAxiosErrorResponseIfAvailable(this.constructor.name),
     );
