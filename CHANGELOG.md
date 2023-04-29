@@ -1,3 +1,16 @@
+## [1.1.1](https://github.com/lyricstify/lyricstify/compare/v1.1.0...v1.1.1) (2023-04-29)
+
+
+### Bug Fixes
+
+* **player:** improve http error handling in currently playing ([d3860a7](https://github.com/lyricstify/lyricstify/commit/d3860a7086fe80482b7398fb04481b958e2e7e72))
+* **transformation:** update deps to google-translate-api-x for better stability ([af00d84](https://github.com/lyricstify/lyricstify/commit/af00d84264b5bcf65590e14199f99ae9aa02d9b6))
+
+
+### Performance Improvements
+
+* **token:** reduce i/o to disk by cache entity to memory ([f219c84](https://github.com/lyricstify/lyricstify/commit/f219c842739f87ce5a9cb7371416ab7ffde9a8bf))
+
 # [1.1.0](https://github.com/lyricstify/lyricstify/compare/v1.0.7...v1.1.0) (2023-04-19)
 
 
