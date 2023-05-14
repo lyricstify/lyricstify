@@ -28,6 +28,9 @@
   "private": false,
   "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": ">=16.20.0"
+  },
   "scripts": {
     "build": "nest build",
     "build:bundle": "esbuild $(esbuild-config ./esbuild.json)",
