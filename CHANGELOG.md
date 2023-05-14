@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/lyricstify/lyricstify/compare/v1.1.1...v1.1.2) (2023-05-14)
+
+
+### Bug Fixes
+
+* **deps:** bump ora from 6.1.2 to 6.3.0 ([23b3ef6](https://github.com/lyricstify/lyricstify/commit/23b3ef6bbf6b32e0d0824660d2e30163ec507d0a))
+
 ## [1.1.1](https://github.com/lyricstify/lyricstify/compare/v1.1.0...v1.1.1) (2023-04-29)
 
 
