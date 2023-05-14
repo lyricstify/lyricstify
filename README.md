@@ -64,7 +64,7 @@ Choose one of the following installation options:
 
 ### Using NPM (Node Package Manager) - recommended for most use cases
 
-First, you need to install [Node.js](https://nodejs.org/en/download) (using the latest LTS version or higher is recommended). Then, you can run the following command in your terminal:
+First, you need to install [Node.js](https://nodejs.org/en/download) (require Node >= 16.20.0, but using the latest LTS version or higher is recommended). Then, you can run the following command in your terminal:
 
 ```
 npm install -g @lyricstify/lyricstify
@@ -128,6 +128,7 @@ When using this installation option, you also need to install [Node.js](https://
 
 Before you can use Lyricstify, you need to generate the Client ID and Client Secret of your Spotify account. To do so you can follow these steps:
 
+- Log in to [Spotify Developer](https://developer.spotify.com/)
 - Go to [your Spotify Applications Dashboard](https://developer.spotify.com/dashboard/) and click on the _Create app_ button.
 - Enter an _App name_ and _App description_ of your choice (they will be displayed to the user on the grant screen)
 - Pay attention to _Redirect URI_, fill in `http://localhost:3000/api/v1/authorize`.
