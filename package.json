@@ -184,7 +184,8 @@
     ],
     "assets": [
       "node_modules/terminal-kit/**/*",
-      "node_modules/kuromoji/**/*"
+      "node_modules/kuromoji/**/*",
+      "!node_modules/kuromoji/test/**/*"
     ]
   }
 }
