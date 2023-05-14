@@ -1,0 +1,19 @@
+name: Dependabot Auto Merge
+
+on:
+  workflow_run:
+    workflows: [Run Code Tests]
+    types:
+      - completed
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Auto-merge Dependabot PRs for semver-minor or patch updates
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        uses: ridedott/merge-me-action@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PRESET: DEPENDABOT_MINOR
