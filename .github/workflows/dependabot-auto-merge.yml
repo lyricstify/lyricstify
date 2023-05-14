@@ -15,5 +15,5 @@ jobs:
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
         uses: ridedott/merge-me-action@v2
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DOTTBOTT_TOKEN }}
           PRESET: DEPENDABOT_MINOR
