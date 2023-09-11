@@ -46,7 +46,7 @@ jobs:
         run: npm run test:ci
 
       - name: Publish test report
-        uses: mikepenz/action-junit-report@v3
+        uses: mikepenz/action-junit-report@v4
         if: ${{ github.event_name == 'pull_request' && always() }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
