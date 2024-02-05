@@ -34,7 +34,7 @@ jobs:
           npm run build:executable
 
       - name: Release
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
