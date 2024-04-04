@@ -86,7 +86,7 @@
     "@types/kuromoji": "^0.1.1",
     "@types/node": "18.19.29",
     "@types/spotify-api": "^0.0.25",
-    "@types/supertest": "^2.0.11",
+    "@types/supertest": "^6.0.2",
     "@types/terminal-kit": "^2.5.1",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
